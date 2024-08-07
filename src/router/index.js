@@ -5,12 +5,18 @@ import ViewedCard from '../components/ViewedCard.vue';
 import Cart from '../components/Cart.vue';
 import Wishlist from '../components/Wishlist.vue';
 import Login from '../components/Login.vue';
+import Comparison from '../components/Comparison.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/comparison',
+    name: 'Comparison',
+    component: Comparison,
   },
   {
     path: '/navbar',

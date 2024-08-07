@@ -1,7 +1,11 @@
 <template>
   <div class="vp-raw">
-    <nav class="border-gray-200 p-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-      <div class="container flex flex-wrap justify-between items-center mx-auto">
+    <nav
+      class="border-gray-200 p-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+    >
+      <div
+        class="container flex flex-wrap justify-between items-center mx-auto"
+      >
         <router-link to="/" class="flex items-center">
           <svg
             width="24"
@@ -10,12 +14,11 @@
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
-              fill="currentColor"
-            />
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor" />
           </svg>
-          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+          <span
+            class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
+          >
             Home
           </span>
         </router-link>
@@ -41,10 +44,18 @@
             ></path>
           </svg>
         </button>
-        <div :class="['w-full md:block md:w-auto', menuOpen ? '' : 'hidden']" id="navbar-default">
-          <ul class="flex flex-col p-4 mt-4 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 bg-gray-50">
+        <div
+          :class="['w-full md:block md:w-auto', menuOpen ? '' : 'hidden']"
+          id="navbar-default"
+        >
+          <ul
+            class="flex flex-col p-4 mt-4 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 bg-gray-50"
+          >
             <li>
-              <router-link to="/wishlist" class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+              <router-link
+                to="/wishlist"
+                class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              >
                 <svg
                   width="24"
                   height="24"
@@ -61,7 +72,29 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/cart" class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+              <router-link to=""
+              class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10 3H14V21H10V3ZM4 7H8V21H4V7ZM16 13H20V21H16V13Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Comparison
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/cart"
+                class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              >
                 <svg
                   width="24"
                   height="24"
@@ -78,7 +111,10 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/login" class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+              <router-link
+                to="/login"
+                class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              >
                 <svg
                   width="24"
                   height="24"
@@ -102,15 +138,15 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 /**
  * Navbar component.
- * 
+ *
  * This component provides a responsive navigation bar with links to the home, wishlist, cart, and login pages.
  */
 export default {
-  name: 'Navbar',
+  name: "Navbar",
   setup() {
     /**
      * Ref for storing the menu open state.
@@ -127,8 +163,8 @@ export default {
 
     return {
       menuOpen,
-      toggleMenu
+      toggleMenu,
     };
-  }
+  },
 };
 </script>
