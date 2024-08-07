@@ -82,14 +82,24 @@ const store = createStore({
     }
   },
   addToComparison(state, product) {
-    if (state.comparisonList.length < 3 && !state.comparisonList.find(item => item.id === product.id)) {
+    // Check if the product is already in the comparison list
+    const existingProduct = state.comparisonList.find(item => item.id === product.id);
+    if (!existingProduct) {
       state.comparisonList.push(product);
     }
   },
   removeFromComparison(state, productId) {
     state.comparisonList = state.comparisonList.filter(product => product.id !== productId);
   },
-
+  actions: {
+    addToComparison({ commit }, product) {
+      commit('addToComparison', product);
+    },
+  },
+  getters: {
+    comparisonList: state => state.comparisonList,
+    // other getters
+  },
   plugins: [persistState()]
 });
 

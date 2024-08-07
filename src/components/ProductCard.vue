@@ -52,7 +52,7 @@
       </button>
       <button
         @click="addToComparison"
-        :class="{ 'icon-button active': isInWishlist }"
+        :class="{ 'icon-button active': isInComparison }"
       >
         <svg
           width="24"
@@ -78,17 +78,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import Button from "./Button.vue";
 
-/**
- * Props for the card component.
- * @typedef {Object} Props
- * @property {Boolean} darkCard - Determines if the card is in dark mode.
- * @property {String} cardImage - The image URL for the card.
- * @property {String} cardTitle - The title of the card.
- * @property {String} cardDescription - The description of the card.
- * @property {Number} cardPrice - The price of the product.
- * @property {String} cardCategory - The category of the product.
- * @property {Number} cardId - The unique ID of the product.
- */
+// Props definition
 const props = defineProps({
   darkCard: {
     type: Boolean,
@@ -123,26 +113,23 @@ const props = defineProps({
 const store = useStore();
 const router = useRouter();
 
-const cardClass = computed(() => {
-  return "max-w-sm rounded overflow-hidden shadow-lg p-6";
-});
+const cardClass = computed(() => "max-w-sm rounded overflow-hidden shadow-lg p-6");
 
 // States for wishlist and cart
 const isInWishlist = computed(() =>
   store.state.wishlist.some((product) => product.id === props.cardId)
 );
 const isInCart = ref(false);
+const isInComparison = computed(() =>
+  store.state.comparisonList.some((product) => product.id === props.cardId)
+);
 
-/**
- * Navigates to the product detail page.
- */
+// Method to navigate to product detail page
 const viewProduct = () => {
   router.push(`/product/${props.cardId}`);
 };
 
-/**
- * Toggles the wishlist status of the product.
- */
+// Method to toggle wishlist status
 const toggleWishlist = () => {
   if (isInWishlist.value) {
     store.commit("removeFromWishlist", props.cardId);
@@ -157,9 +144,7 @@ const toggleWishlist = () => {
   }
 };
 
-/**
- * Toggles the cart status of the product.
- */
+// Method to toggle cart status
 const toggleCart = () => {
   isInCart.value = !isInCart.value;
   if (isInCart.value) {
@@ -180,9 +165,7 @@ const toggleCart = () => {
   );
 };
 
-/**
- * Adds the product to the comparison list.
- */
+// Method to add product to comparison list
 const addToComparison = () => {
   store.commit("addToComparison", {
     id: props.cardId,
