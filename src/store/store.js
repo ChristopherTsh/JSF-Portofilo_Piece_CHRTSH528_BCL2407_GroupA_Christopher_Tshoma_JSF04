@@ -10,6 +10,7 @@ const store = createStore({
     cart: [],
     wishlist: [],
     user: null,
+    comparisonList: [],
   },
   mutations: {
     setSelectedCategory(state, category) {
@@ -80,6 +81,15 @@ const store = createStore({
       return !!state.user;
     }
   },
+  addToComparison(state, product) {
+    if (state.comparisonList.length < 3 && !state.comparisonList.find(item => item.id === product.id)) {
+      state.comparisonList.push(product);
+    }
+  },
+  removeFromComparison(state, productId) {
+    state.comparisonList = state.comparisonList.filter(product => product.id !== productId);
+  },
+
   plugins: [persistState()]
 });
 

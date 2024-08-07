@@ -1,81 +1,53 @@
 <template>
-    <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
-      <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-          Compare products
-        </h2>
-        <div class="mt-6 flex flex-col space-y-4">
-          <div class="flex space-x-4">
-            <button @click="addNewProduct" class="btn-primary">+ Add new product</button>
-            <button @click="resetAll" class="btn-secondary">Reset all</button>
-          </div>
-          <div class="flex space-x-4">
-            <div v-for="(product, index) in products" :key="index" class="flex-1 border rounded-lg p-4">
-              <h3 class="text-lg font-semibold">{{ product.productName }}</h3>
-              <p class="text-sm text-gray-500">{{ product.category }}</p>
-              <p class="text-sm text-gray-500">${{ product.price }}</p>
-              <p class="text-sm text-gray-500">{{ product.description }}</p>
-              <div class="flex items-center">
-                <span v-for="star in product.rating" :key="star" class="text-yellow-500">★</span>
-                <span v-for="star in 5 - product.rating" :key="star" class="text-gray-300">★</span>
-              </div>
-              <p class="text-sm text-gray-500">Delivery: Will confirm soon</p>
-              <p class="text-sm text-gray-500">Tax: 15%</p>
-              <button @click="addToCart(product)" class="btn-primary mt-4">Add to cart</button>
-            </div>
-          </div>
+    <div class="comparison-page">
+      <h1 class="text-2xl font-bold mb-4">Product Comparison</h1>
+      <div class="comparison-grid">
+        <div v-for="product in comparisonList" :key="product.id" class="comparison-item">
+          <img :src="product.image" alt="Product Image" class="w-full h-auto mb-2" />
+          <div class="text-lg font-semibold">{{ product.title }}</div>
+          <div>{{ product.category }}</div>
+          <div class="text-lg font-bold mt-2">${{ product.price }}</div>
+          <button 
+            @click="removeFromComparison(product.id)"
+            class="text-white bg-red-500 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 mt-4"
+          >
+            Remove
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   </template>
   
-  <script>
-  import { ref } from 'vue';
+  <script setup>
+  import { computed } from 'vue';
+  import { useStore } from 'vuex';
   
-  export default {
-    setup() {
-      const products = ref([]);
+  const store = useStore();
   
-      const fetchProducts = async () => {
-        try {
-          const response = await fetch('your-api-endpoint');
-          const data = await response.json();
-          products.value = data.slice(0, 3); // Assuming the API returns an array of products
-        } catch (error) {
-          console.error('Error fetching products:', error);
-        }
-      };
+  const comparisonList = computed(() => store.state.comparisonList);
   
-      const addNewProduct = () => {
-        // Logic to add a new product
-      };
-  
-      const resetAll = () => {
-        products.value = [];
-      };
-  
-      const addToCart = (product) => {
-        // Logic to add product to the cart
-      };
-  
-      fetchProducts();
-  
-      return {
-        products,
-        addNewProduct,
-        resetAll,
-        addToCart,
-      };
-    },
+  const removeFromComparison = (productId) => {
+    store.commit('removeFromComparison', productId);
   };
   </script>
   
-  <style>
-  .btn-primary {
-    @apply bg-blue-500 text-white px-4 py-2 rounded-lg;
+  <style scoped>
+  .comparison-page {
+    padding: 1rem;
   }
-  .btn-secondary {
-    @apply bg-gray-300 text-gray-700 px-4 py-2 rounded-lg;
+  
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .comparison-item {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    text-align: center;
   }
   </style>
   

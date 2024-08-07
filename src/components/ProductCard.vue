@@ -12,9 +12,9 @@
       <p class="text-base font-semibold mt-2">${{ cardPrice }}</p>
     </div>
     <div class="px-6 pt-4 pb-2 flex justify-between items-center">
-      <button 
-        @click="toggleWishlist" 
-        :class="{'icon-button active': isInWishlist}"
+      <button
+        @click="toggleWishlist"
+        :class="{ 'icon-button active': isInWishlist }"
         class="icon-button"
       >
         <svg
@@ -31,9 +31,9 @@
           />
         </svg>
       </button>
-      <button 
-        @click="toggleCart" 
-        :class="{'icon-button active': isInCart}"
+      <button
+        @click="toggleCart"
+        :class="{ 'icon-button active': isInCart }"
         class="icon-button"
       >
         <svg
@@ -50,6 +50,23 @@
           />
         </svg>
       </button>
+      <button
+        @click="addToComparison"
+        :class="{ 'icon-button active': isInWishlist }"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 3H14V21H10V3ZM4 7H8V21H4V7ZM16 13H20V21H16V13Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
       <Button @click="viewProduct" intent="view product">View Product</Button>
     </div>
   </div>
@@ -58,7 +75,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from 'vuex';
+import { useStore } from "vuex";
 import Button from "./Button.vue";
 
 /**
@@ -128,10 +145,10 @@ const viewProduct = () => {
  */
 const toggleWishlist = () => {
   if (isInWishlist.value) {
-    store.commit('removeFromWishlist', props.cardId);
+    store.commit("removeFromWishlist", props.cardId);
     console.log(`Product ${props.cardId} removed from wishlist`);
   } else {
-    store.commit('addToWishlist', {
+    store.commit("addToWishlist", {
       id: props.cardId,
       title: props.cardTitle,
       price: props.cardPrice,
@@ -146,17 +163,35 @@ const toggleWishlist = () => {
 const toggleCart = () => {
   isInCart.value = !isInCart.value;
   if (isInCart.value) {
-    store.commit('addToCart', {
+    store.commit("addToCart", {
       id: props.cardId,
       title: props.cardTitle,
       price: props.cardPrice,
       category: props.cardCategory,
-      image: props.cardImage
+      image: props.cardImage,
     });
   } else {
-    store.commit('removeFromCart', props.cardId);
+    store.commit("removeFromCart", props.cardId);
   }
-  console.log(`Product ${props.cardId} ${isInCart.value ? 'added to' : 'removed from'} cart`);
+  console.log(
+    `Product ${props.cardId} ${
+      isInCart.value ? "added to" : "removed from"
+    } cart`
+  );
+};
+
+/**
+ * Adds the product to the comparison list.
+ */
+const addToComparison = () => {
+  store.commit("addToComparison", {
+    id: props.cardId,
+    title: props.cardTitle,
+    category: props.cardCategory,
+    price: props.cardPrice,
+    image: props.cardImage,
+  });
+  console.log(`Product ${props.cardId} added to comparison`);
 };
 </script>
 
