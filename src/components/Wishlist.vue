@@ -15,11 +15,13 @@
               class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16 mb-4 p-4 border rounded shadow-sm w-full"
             >
               <div class="shrink-0 max-w-md lg:max-w-lg mx-auto">
+                <a :href="product.link" class="shrink-0 md:order-1">
                 <img
                   :src="product.image"
                   class="h-20 w-20"
                   :alt="product.title"
                 />
+              </a>
               </div>
   
               <div class="mt-6 sm:mt-8 lg:mt-0">
