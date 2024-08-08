@@ -54,6 +54,15 @@ const store = createStore({
     removeFromWishlist(state, productId) {
       state.wishlist = state.wishlist.filter(product => product.id !== productId);
     },
+    addToComparison(state, product) {
+      const existingProduct = state.comparisonList.find(item => item.id === product.id);
+      if (!existingProduct) {
+        state.comparisonList.push(product);
+      }
+    },
+    removeFromComparison(state, productId) {
+      state.comparisonList = state.comparisonList.filter(product => product.id !== productId);
+    },
     setUser(state, user) {
       state.user = user;
     },
@@ -62,6 +71,11 @@ const store = createStore({
     },
     setState(state, newState) {
       Object.assign(state, newState);
+    },
+  },
+  actions: {
+    addToComparison({ commit }, product) {
+      commit('addToComparison', product);
     },
   },
   getters: {
@@ -79,26 +93,8 @@ const store = createStore({
     },
     isAuthenticated(state) {
       return !!state.user;
-    }
-  },
-  addToComparison(state, product) {
-    // Check if the product is already in the comparison list
-    const existingProduct = state.comparisonList.find(item => item.id === product.id);
-    if (!existingProduct) {
-      state.comparisonList.push(product);
-    }
-  },
-  removeFromComparison(state, productId) {
-    state.comparisonList = state.comparisonList.filter(product => product.id !== productId);
-  },
-  actions: {
-    addToComparison({ commit }, product) {
-      commit('addToComparison', product);
     },
-  },
-  getters: {
     comparisonList: state => state.comparisonList,
-    // other getters
   },
   plugins: [persistState()]
 });
