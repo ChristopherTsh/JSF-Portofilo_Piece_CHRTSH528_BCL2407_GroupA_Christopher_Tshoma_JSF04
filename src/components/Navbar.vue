@@ -10,7 +10,7 @@
             :fill="isAuthenticated ? 'blue' : 'red'"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor" />
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
           </svg>
           <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
             Home
@@ -54,10 +54,10 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  :style="{ fill: isAuthenticated ? 'blue' : 'red' }"
                 >
                   <path
                     d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    fill="currentColor"
                   />
                 </svg>
                 Wishlist
@@ -74,10 +74,10 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  :style="{ fill: isAuthenticated ? 'blue' : 'red' }"
                 >
                   <path
                     d="M10 3H14V21H10V3ZM4 7H8V21H4V7ZM16 13H20V21H16V13Z"
-                    fill="currentColor"
                   />
                 </svg>
                 Comparison
@@ -94,10 +94,10 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  :style="{ fill: isAuthenticated ? 'blue' : 'red' }"
                 >
                   <path
                     d="M7 18c-1.1 0-1.99 0.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99 0.9-1.99 2s0.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 16h14V6H7V16zM5 4h2v2H4.22l-1.6 8H18v2H3.4L5 4z"
-                    fill="currentColor"
                   />
                 </svg>
                 Cart
@@ -114,10 +114,10 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  :style="{ fill: isAuthenticated ? 'blue' : 'red' }"
                 >
                   <path
                     d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-                    fill="currentColor"
                   />
                 </svg>
                 Login
@@ -132,10 +132,10 @@
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  :style="{ fill: isAuthenticated ? 'blue' : 'red' }"
                 >
                   <path
                     d="M16 13v-2H8V7l-5 5 5 5v-4h8zm2-11H6v2h12v14H6v2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
-                    fill="currentColor"
                   />
                 </svg>
                 Logout
