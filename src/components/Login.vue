@@ -16,48 +16,48 @@
 <script>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 
-/**
- * Login component.
- * 
- * This component provides a login form for users to enter their username and password.
- * It includes navigation options for signing up and resetting forgotten passwords.
- */
 export default {
   setup() {
-    /**
-     * Ref for storing the username input.
-     * @type {import('vue').Ref<string>}
-     */
     const username = ref('');
-
-    /**
-     * Ref for storing the password input.
-     * @type {import('vue').Ref<string>}
-     */
     const password = ref('');
-
     const router = useRouter();
+    const store = useStore();
 
-    /**
-     * Handles the login form submission.
-     */
-    const login = () => {
-      // Perform login logic here
-      console.log(`Logging in with username: ${username.value}, password: ${password.value}`);
-      router.push('/');
+    const login = async () => {
+      try {
+        const response = await fetch('https://fakestoreapi.com/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username.value,
+            password: password.value
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        if (data.token) {
+          store.commit('setUser', { token: data.token });
+          router.push('/');
+        } else {
+          console.error('Login failed');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+      }
     };
 
-    /**
-     * Navigates to the sign-up page.
-     */
     const navigateToSignup = () => {
       router.push('/signup');
     };
 
-    /**
-     * Navigates to the forgot password page.
-     */
     const navigateToForgotPassword = () => {
       router.push('/forgot-password');
     };

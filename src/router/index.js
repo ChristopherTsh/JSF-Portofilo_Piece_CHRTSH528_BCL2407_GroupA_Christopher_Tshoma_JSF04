@@ -5,6 +5,7 @@ import ViewedCard from '../components/ViewedCard.vue';
 import Cart from '../components/Cart.vue';
 import Wishlist from '../components/Wishlist.vue';
 import Login from '../components/Login.vue';
+import store from '../store/store';
 import Comparison from '../components/Comparison.vue';
 
 const routes = [
@@ -17,6 +18,13 @@ const routes = [
     path: '/comparison',
     name: 'Comparison',
     component: Comparison,
+    beforeEnter: (to, from, next) => {
+      if (store.getters.isAuthenticated) {
+        next();
+      } else {
+        next('/login');
+      }
+    },
   },
   {
     path: '/navbar',
@@ -33,6 +41,13 @@ const routes = [
     path: '/cart',
     name: 'Cart',
     component: Cart,
+    beforeEnter: (to, from, next) => {
+      if (store.getters.isAuthenticated) {
+        next();
+      } else {
+        next('/login');
+      }
+    }
   },
   {
     path: '/login',
@@ -43,6 +58,13 @@ const routes = [
     path: '/wishlist',
     name: 'Wishlist',
     component: Wishlist,
+    beforeEnter: (to, from, next) => {
+      if (store.getters.isAuthenticated) {
+        next();
+      } else {
+        next('/login');
+      }
+    }
   },
 ];
 
