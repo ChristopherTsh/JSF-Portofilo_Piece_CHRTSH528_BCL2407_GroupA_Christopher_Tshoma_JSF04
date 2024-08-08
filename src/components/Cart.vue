@@ -78,9 +78,16 @@
                     Total
                   </dt>
                   <dd class="text-base font-medium text-gray-900 dark:text-white">
-                    ${{ cartTotal.toFixed(2) }}
+                    ${{ discountedTotal.toFixed(2) }}
                   </dd>
                 </dl>
+
+                <div v-if="discountItemsCount < 5" class="text-sm text-green-600 dark:text-green-400">
+                  Discount Items: {{ discountItemsCount }}/5
+                </div>
+                <div v-else class="text-sm text-green-600 dark:text-green-400">
+                  Discount Applied: 10% off
+                </div>
               </div>
 
               <a href="/" class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-black hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
@@ -108,9 +115,12 @@
                   <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                     Do you have a voucher or gift card?
                   </label>
-                  <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="" required />
+                  <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-600 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Enter voucher or gift card" />
                 </div>
-                <Button intent="view product" type="submit">Apply Code</Button>
+
+                <button type="submit" class="w-full rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                  Redeem
+                </button>
               </form>
             </div>
           </div>
@@ -121,76 +131,47 @@
 </template>
 
 <script>
-import { useStore } from "vuex";
 import { computed } from "vue";
-import Button from "./Button.vue";
+import { useStore } from "vuex";
 
-/**
- * ShoppingCart component.
- * 
- * This component displays the items in the user's shopping cart,
- * allows modification of item quantities, and provides options to
- * proceed to checkout or continue shopping.
- */
 export default {
-  components: {
-    Button
-  },
   setup() {
     const store = useStore();
-
-    /**
-     * Computed property to get the cart items from the store.
-     * @returns {Array} Array of cart items.
-     */
+    
     const cart = computed(() => store.state.cart);
 
-    /**
-     * Computed property to get the total price of items in the cart.
-     * @returns {number} Total price of items in the cart.
-     */
-    const cartTotal = computed(() => store.getters.cartTotal);
+    const discountItemsCount = computed(() => {
+      return cart.value.filter(item => item.isSaleItem).reduce((count, item) => count + item.quantity, 0);
+    });
 
-    /**
-     * Removes an item from the cart.
-     * @param {number} productId - The ID of the product to remove.
-     */
-    const removeFromCart = (productId) => {
-      store.commit("removeFromCart", productId);
-    };
+    const cartTotal = computed(() => {
+      return cart.value.reduce((total, item) => total + item.price * item.quantity, 0);
+    });
 
-    /**
-     * Adds an item to the favorites list.
-     * @param {number} productId - The ID of the product to add to favorites.
-     */
-    const addToFavorites = (productId) => {
-      store.commit("addToFavorites", productId);
-    };
-
-    /**
-     * Increments the quantity of an item in the cart.
-     * @param {number} productId - The ID of the product to increment quantity.
-     */
-    const incrementQuantity = (productId) => {
-      store.commit("incrementQuantity", productId);
-    };
-
-    /**
-     * Decrements the quantity of an item in the cart.
-     * @param {number} productId - The ID of the product to decrement quantity.
-     */
-    const decrementQuantity = (productId) => {
-      store.commit("decrementQuantity", productId);
-    };
+    const discountedTotal = computed(() => {
+      return discountItemsCount.value >= 5 ? cartTotal.value * 0.9 : cartTotal.value;
+    });
 
     return {
       cart,
+      discountItemsCount,
       cartTotal,
-      removeFromCart,
-      addToFavorites,
-      incrementQuantity,
-      decrementQuantity,
+      discountedTotal,
     };
   },
+  methods: {
+    incrementQuantity(productId) {
+      this.$store.commit('incrementQuantity', productId);
+    },
+    decrementQuantity(productId) {
+      this.$store.commit('decrementQuantity', productId);
+    },
+    removeFromCart(productId) {
+      this.$store.commit('removeFromCart', productId);
+    },
+    addToFavorites(productId) {
+      // Add to favorites logic here
+    },
+  }
 };
 </script>
