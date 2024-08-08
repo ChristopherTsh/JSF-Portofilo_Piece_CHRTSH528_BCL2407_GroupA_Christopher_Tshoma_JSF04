@@ -1,24 +1,18 @@
 <template>
   <div class="vp-raw">
-    <nav
-      class="border-gray-200 p-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-    >
-      <div
-        class="container flex flex-wrap justify-between items-center mx-auto"
-      >
+    <nav class="border-gray-200 p-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+      <div class="container flex flex-wrap justify-between items-center mx-auto">
         <router-link to="/" class="flex items-center">
           <svg
             width="24"
             height="24"
             viewBox="0 0 24 24"
-            fill="none"
+            :fill="isAuthenticated ? 'blue' : 'red'"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor" />
           </svg>
-          <span
-            class="self-center text-xl font-semibold whitespace-nowrap dark:text-white"
-          >
+          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
             Home
           </span>
         </router-link>
@@ -48,9 +42,7 @@
           :class="['w-full md:block md:w-auto', menuOpen ? '' : 'hidden']"
           id="navbar-default"
         >
-          <ul
-            class="flex flex-col p-4 mt-4 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 bg-gray-50"
-          >
+          <ul class="flex flex-col p-4 mt-4 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 bg-gray-50">
             <li>
               <router-link
                 to="/wishlist"
@@ -72,8 +64,9 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/comparison"
-              class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              <router-link
+                to="/comparison"
+                class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 <svg
                   width="24"
@@ -103,7 +96,7 @@
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.25 10h9.25l1.45-4H5.21L7.25 10zm13.65-4.34l-3.2 9.19c-.14.43-.52.73-.98.73H7.56c-.45 0-.84-.31-.98-.74L3.36 5.65H1V3h3.25c.45 0 .84.31.98.74l1.5 4.25H18c.38 0 .72.21.89.55.17.34.17.75 0 1.09L18 5.66h-3.76l1.5-4.25c.14-.43.53-.74.98-.74H20v2h-1.75z"
+                    d="M7 18c-1.1 0-1.99 0.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99 0.9-1.99 2s0.89 2 1.99 2 2-.9 2-2-.9-2-2-2zM7 16h14V6H7V16zM5 4h2v2H4.22l-1.6 8H18v2H3.4L5 4z"
                     fill="currentColor"
                   />
                 </svg>
@@ -113,10 +106,10 @@
             <li>
               <router-link
                 to="/login"
+                v-if="!isAuthenticated"
                 class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 <svg
-                  width="24"
                   height="24"
                   viewBox="0 0 24 24"
                   fill="none"
@@ -129,6 +122,24 @@
                 </svg>
                 Login
               </router-link>
+              <button
+                v-else
+                @click="logout"
+                class="block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+              >
+                <svg
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M16 13v-2H8V7l-5 5 5 5v-4h8zm2-11H6v2h12v14H6v2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Logout
+              </button>
             </li>
           </ul>
         </div>
@@ -138,33 +149,36 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-/**
- * Navbar component.
- *
- * This component provides a responsive navigation bar with links to the home, wishlist, cart, and login pages.
- */
 export default {
-  name: "Navbar",
+  name: 'Navbar',
   setup() {
-    /**
-     * Ref for storing the menu open state.
-     * @type {import('vue').Ref<boolean>}
-     */
     const menuOpen = ref(false);
+    const store = useStore();
+    const router = useRouter();
 
-    /**
-     * Toggles the menu open state.
-     */
     const toggleMenu = () => {
       menuOpen.value = !menuOpen.value;
+    };
+
+    const isAuthenticated = computed(() => store.getters.isAuthenticated);
+
+    const logout = () => {
+      store.commit('logout');
+      router.push('/login');
     };
 
     return {
       menuOpen,
       toggleMenu,
+      isAuthenticated,
+      logout,
     };
   },
 };
 </script>
+
+

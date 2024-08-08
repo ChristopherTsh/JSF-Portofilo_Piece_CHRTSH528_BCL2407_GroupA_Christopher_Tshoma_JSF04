@@ -9,6 +9,7 @@ const store = createStore({
     cart: [],
     wishlist: [],
     user: null,
+    isAuthenticated: false,
     comparisonList: [],
   },
   mutations: {
@@ -64,9 +65,11 @@ const store = createStore({
     },
     setUser(state, user) {
       state.user = user;
+      state.isAuthenticated = true;
     },
     logout(state) {
       state.user = null;
+      state.isAuthenticated = false;
     },
     setState(state, newState) {
       Object.assign(state, newState);
@@ -91,7 +94,7 @@ const store = createStore({
       return state.cart.reduce((total, product) => total + (product.price * product.quantity), 0);
     },
     isAuthenticated(state) {
-      return !!state.user;
+      return !!state.isAuthenticated;
     },
     comparisonList: state => state.comparisonList,
   },
