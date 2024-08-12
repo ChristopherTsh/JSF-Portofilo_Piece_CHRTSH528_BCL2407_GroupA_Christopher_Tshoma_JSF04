@@ -108,6 +108,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  cardRatings:{
+    type: String,
+    default: "",
+  }
 });
 
 const store = useStore();
@@ -139,9 +143,12 @@ const toggleWishlist = () => {
       id: props.cardId,
       title: props.cardTitle,
       price: props.cardPrice,
+      image: props.cardImage,
+      rating: props.cardRatings,
     });
-    console.log(`Product ${props.cardId} added to wishlist`);
+    // console.log(`Product ${props.cardId} added to wishlist`);
   }
+  console.log(props.cardRatings)
 };
 
 // Method to toggle cart status
@@ -174,7 +181,7 @@ const addToComparison = () => {
     price: props.cardPrice,
     image: props.cardImage,
   });
-  console.log(`Product ${props.cardId} added to comparison`);
+  // console.log(`Product ${props.cardId} added to comparison`);
 };
 </script>
 

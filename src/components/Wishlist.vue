@@ -18,7 +18,7 @@
                 <a :href="product.link" class="shrink-0 md:order-1">
                 <img
                   :src="product.image"
-                  class="h-20 w-20"
+                  class="h-48 w-40"
                   :alt="product.title"
                 />
               </a>
@@ -124,7 +124,6 @@
       const store = useStore();
   
       const wishlist = computed(() => store.state.wishlist);
-  
       const removeFromWishlist = (productId) => {
         store.commit('removeFromWishlist', productId);
       };

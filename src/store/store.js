@@ -49,6 +49,7 @@ const store = createStore({
       const existingProduct = state.wishlist.find(item => item.id === product.id);
       if (!existingProduct) {
         state.wishlist.push(product);
+        console.log(state.wishlist)
       }
     },
     removeFromWishlist(state, productId) {
