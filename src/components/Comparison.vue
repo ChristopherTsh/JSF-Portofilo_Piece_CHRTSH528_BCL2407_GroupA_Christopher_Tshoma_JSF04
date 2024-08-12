@@ -118,12 +118,51 @@
           <tr>
             <td></td>
             <td v-for="product in comparisonList" :key="product.id" class="p-4">
-              <button @click="addToCart(product)" class="block w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-                Add to Cart
-              </button>
-              <button @click="removeFromComparison(product.id)" class="block w-full bg-red-500 text-white py-2 rounded-md mt-2 hover:bg-red-600">
-                Remove
-              </button>
+              <button
+                    @click="addToCart(product)"
+                    class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    role="button"
+                  >
+                    <svg
+                      class="w-5 h-5 -ms-2 me-2"
+                      aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
+                      />
+                    </svg>
+                    Add to Cart
+                  </button>
+              <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+                  <button
+                    @click="removeFromComparison(product.id)"
+                    class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                    role="button"
+                  >
+                  <svg
+                  class="w-5 h-5 -ms-2 me-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="black"
+                  width="48px"
+                  height="48px"
+                >
+                  <path
+                    d="M3,6L5,6L21,6L21,8L19.9375,8L18.917,19.4052C18.8315,20.3556 18.0374,21.0637 17.0848,21.0637L6.9152,21.0637C5.9626,21.0637 5.1685,20.3556 5.083,19.4052L4.0625,8L3,8L3,6ZM8,10L8.0035,18L9.9965,18L9.993,10L8,10ZM12,10L12,18L14,18L14,10L12,10ZM9,2L15,2L15,4L21,4L21,6L3,6L3,4L9,4L9,2Z"
+                  />
+                </svg>
+                    Remove 
+                  </button>
+              </div>
             </td>
           </tr>
         </tfoot>
