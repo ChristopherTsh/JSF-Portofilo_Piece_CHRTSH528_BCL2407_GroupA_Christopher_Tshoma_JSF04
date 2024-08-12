@@ -55,23 +55,18 @@
                     class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                     role="button"
                   >
-                    <svg
-                      class="w-5 h-5 -ms-2 me-2"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
-                      />
-                    </svg>
+                  <svg
+                  class="w-5 h-5 -ms-2 me-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="black"
+                  width="48px"
+                  height="48px"
+                >
+                  <path
+                    d="M3,6L5,6L21,6L21,8L19.9375,8L18.917,19.4052C18.8315,20.3556 18.0374,21.0637 17.0848,21.0637L6.9152,21.0637C5.9626,21.0637 5.1685,20.3556 5.083,19.4052L4.0625,8L3,8L3,6ZM8,10L8.0035,18L9.9965,18L9.993,10L8,10ZM12,10L12,18L14,18L14,10L12,10ZM9,2L15,2L15,4L21,4L21,6L3,6L3,4L9,4L9,2Z"
+                  />
+                </svg>
                     Remove from Wishlist
                   </button>
   
