@@ -145,6 +145,7 @@ const toggleWishlist = () => {
       price: props.cardPrice,
       image: props.cardImage,
       rating: props.cardRatings,
+      
     });
     // console.log(`Product ${props.cardId} added to wishlist`);
   }
@@ -180,6 +181,8 @@ const addToComparison = () => {
     category: props.cardCategory,
     price: props.cardPrice,
     image: props.cardImage,
+    description: props.cardDescription,
+    rating: props.cardRatings,
   });
   // console.log(`Product ${props.cardId} added to comparison`);
 };

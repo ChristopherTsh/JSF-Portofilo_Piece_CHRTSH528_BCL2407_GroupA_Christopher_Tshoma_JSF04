@@ -5,32 +5,83 @@
       <table>
         <thead>
           <tr>
-            <th>General Information</th>
+            <th>Image</th>
             <th v-for="product in comparisonList" :key="product.id">
-              <img :src="product.image" alt="Product Image" class="product-image" />
-              <div>{{ product.title }}</div>
-              <div>{{ product.category }}</div>
-              <div class="price">${{ product.price }}</div>
+              <img
+                :src="product.image"
+                alt="Product Image"
+                class="product-image"
+              />
             </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Rating</td>
-            <td v-for="product in comparisonList" :key="product.id">{{ product.rating }} / 5</td>
+            <th>Title</th>
+            <td v-for="product in comparisonList" :key="product.id">
+              {{ product.title }}
+            </td>
           </tr>
           <tr>
-            <td>Description</td>
-            <td v-for="product in comparisonList" :key="product.id">{{ product.description }}</td>
+            <th>Category</th>
+            <td v-for="product in comparisonList" :key="product.id">
+              {{ product.category }}
+            </td>
           </tr>
-          <!-- Add more rows here for additional properties -->
+          <tr>
+            <th>Price</th>
+            <td v-for="product in comparisonList" :key="product.id">
+              ${{ product.price }}
+            </td>
+          </tr>
+          <tr>
+            <th>Description</th>
+            <td v-for="product in comparisonList" :key="product.id">
+              {{ product.description }}
+            </td>
+          </tr>
+          <tr>
+            <th>Ratings</th>
+            <td
+              v-for="product in comparisonList"
+              :key="product.id"
+              
+            >
+            <div class="svgProduct rating w-52 flex items-center -ml-2 mb-2">
+                    <svg
+                      v-for="i in 5"
+                      :key="i"
+                      :class="i <= Math.round(product.rating?.rate || 0) ? 'filled' : 'empty'"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M12 .587l3.668 7.571 8.332 1.151-6.063 5.852 1.428 8.287L12 18.897l-7.365 3.851 1.428-8.287-6.063-5.852 8.332-1.151z"
+                      />
+                    </svg>
+                  </div>
+          </td>
+          </tr>
+          <tr>
+            <th>reviews</th>
+            <td v-for="product in comparisonList" :key="product.id">
+              <span>({{ product.rating?.count || 0 }}reviews)</span>
+            </td>
+          </tr>
+          
         </tbody>
         <tfoot>
           <tr>
             <td></td>
             <td v-for="product in comparisonList" :key="product.id">
-              <button @click="addToCart(product)" class="add-to-cart-button">Add to cart</button>
-              <button @click="removeFromComparison(product.id)" class="remove-button">Remove</button>
+              <button @click="addToCart(product)" class="add-to-cart-button">
+                Add to cart
+              </button>
+              <button
+                @click="removeFromComparison(product.id)"
+                class="remove-button"
+              >
+                Remove
+              </button>
             </td>
           </tr>
         </tfoot>
@@ -44,29 +95,34 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { useStore } from 'vuex';
+import { computed } from "vue";
+import { useStore } from "vuex";
 
 const store = useStore();
 
 const comparisonList = computed(() => store.getters.comparisonList);
 
 const removeFromComparison = (productId) => {
-  store.commit('removeFromComparison', productId);
+  store.commit("removeFromComparison", productId);
 };
 
 const resetComparison = () => {
-  store.commit('resetComparison');
+  store.commit("resetComparison");
 };
 
 const addToCart = (product) => {
-  store.commit('addToCart', product);
+  store.commit("addToCart", product);
 };
 </script>
 
 <style scoped>
 .comparison-page {
   padding: 1rem;
+}
+.stars {
+  width: 170px;
+  display: flex;
+  height: 59px;
 }
 
 .comparison-table {
@@ -82,6 +138,7 @@ const addToCart = (product) => {
 }
 
 .product-image {
+  display: inline;
   width: 100px;
   height: auto;
 }
