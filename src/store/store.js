@@ -49,7 +49,7 @@ const store = createStore({
       const existingProduct = state.wishlist.find(item => item.id === product.id);
       if (!existingProduct) {
         state.wishlist.push(product);
-        console.log(state.wishlist)
+        console.log(state.wishlist);
       }
     },
     removeFromWishlist(state, productId) {
@@ -57,12 +57,15 @@ const store = createStore({
     },
     addToComparison(state, product) {
       const existingProduct = state.comparisonList.find(item => item.id === product.id);
-      if (!existingProduct) {
+      if (!existingProduct && state.comparisonList.length < 4) {
         state.comparisonList.push(product);
       }
     },
     removeFromComparison(state, productId) {
       state.comparisonList = state.comparisonList.filter(product => product.id !== productId);
+    },
+    resetComparison(state) {
+      state.comparisonList = [];
     },
     setUser(state, user) {
       state.user = user;
@@ -79,6 +82,9 @@ const store = createStore({
   actions: {
     addToComparison({ commit }, product) {
       commit('addToComparison', product);
+    },
+    resetComparison({ commit }) {
+      commit('resetComparison');
     },
   },
   getters: {
@@ -99,7 +105,7 @@ const store = createStore({
     },
     comparisonList: state => state.comparisonList,
   },
-  plugins: [persistState()]
+  plugins: [persistState()],
 });
 
 export default store;
