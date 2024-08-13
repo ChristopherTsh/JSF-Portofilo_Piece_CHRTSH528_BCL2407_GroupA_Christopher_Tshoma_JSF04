@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<!-- <script>
+<script>
 import { computed } from 'vue';
 import { useStore } from 'vuex';
 
@@ -21,4 +21,4 @@ export default {
     };
   }
 };
-</script> -->
+</script>

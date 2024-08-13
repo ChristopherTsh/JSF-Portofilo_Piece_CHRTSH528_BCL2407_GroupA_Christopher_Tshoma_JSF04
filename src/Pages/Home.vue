@@ -146,9 +146,9 @@
 <script>
 import { ref, onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
-import ProductCard from "./ProductCard.vue";
-import LoadingPage from "./LoadingPage.vue";
-import NotFoundPage from "./NotFoundPage.vue";
+import ProductCard from "../components/ProductCard.vue";
+import LoadingPage from "../components/LoadingPage.vue";
+import NotFoundPage from "../components/NotFoundPage.vue";
 import axios from "axios";
 
 export default {

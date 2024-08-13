@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../components/Home.vue';
+import Home from '../Pages/Home.vue'
 import Navbar from '../components/Navbar.vue';
 import ViewedCard from '../components/ViewedCard.vue';
-import Cart from '../components/Cart.vue';
-import Wishlist from '../components/Wishlist.vue';
-import Login from '../components/Login.vue';
+import Cart from '../Pages/Cart.vue';
+import Wishlist from '../Pages/Wishlist.vue';
+import Login from '../Pages/Login.vue';
 import store from '../store/store';
-import Comparison from '../components/Comparison.vue';
+import Comparison from '../Pages/Comparison.vue';
 
 const routes = [
   {
