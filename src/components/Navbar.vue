@@ -3,19 +3,44 @@
     <nav class="border-gray-200 p-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
       <div class="container flex flex-wrap justify-between items-center mx-auto">
         <router-link to="/" class="flex items-center">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            :fill="isAuthenticated ? 'blue' : 'red'"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-          </svg>
-          <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-            Home
-          </span>
+          <!-- Show avatar and nickname after login -->
+          <template v-if="isAuthenticated">
+            <img
+  :src="userAvatar ? `/avatars/${userAvatar}` : ''"
+  alt="User Avatar"
+  class="h-8 w-8 rounded-full mr-2"
+/>
+<span
+  class="self-center text-xl font-semibold whitespace-nowrap"
+  :style="{ color: 'black' }"
+>
+  {{ userNickname || 'User' }}
+</span>
+          </template>
+
+          <!-- Show default Home text if not logged in -->
+          <template v-else>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              :style="{ fill: isAuthenticated ? 'blue' : 'red' }"
+            >
+              <path
+                d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
+              />
+            </svg>
+            <span
+              class="self-center text-xl font-semibold whitespace-nowrap"
+              :style="{ color: 'black'}"
+            >
+              Home
+            </span>
+          </template>
         </router-link>
+
         <button
           @click="toggleMenu"
           aria-controls="navbar-default"
@@ -38,6 +63,7 @@
             ></path>
           </svg>
         </button>
+
         <div
           :class="['w-full md:block md:w-auto', menuOpen ? '' : 'hidden']"
           id="navbar-default"
@@ -165,6 +191,8 @@ export default {
     };
 
     const isAuthenticated = computed(() => store.getters.isAuthenticated);
+    const userAvatar = computed(() => store.state.user?.avatar || '');
+const userNickname = computed(() => store.state.user?.nickname || 'User');
 
     const logout = () => {
       store.commit('logout');
@@ -175,10 +203,14 @@ export default {
       menuOpen,
       toggleMenu,
       isAuthenticated,
+      userAvatar,
+      userNickname,
       logout,
     };
   },
 };
 </script>
 
-
+<style scoped>
+/* Optional: Add any additional styles here */
+</style>

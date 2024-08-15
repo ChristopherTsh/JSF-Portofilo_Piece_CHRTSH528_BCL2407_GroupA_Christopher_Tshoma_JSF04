@@ -67,8 +67,8 @@ const store = createStore({
     resetComparison(state) {
       state.comparisonList = [];
     },
-    setUser(state, user) {
-      state.user = user;
+    setUser(state, { token, nickname, avatar }) {
+      state.user = { token, nickname, avatar };
       state.isAuthenticated = true;
     },
     logout(state) {
