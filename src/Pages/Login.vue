@@ -51,7 +51,7 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    const avatars = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png'];
+    const avatars = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png','avatar5.png','avatar6.png'];
 
     const selectAvatar = (avatar) => {
       selectedAvatar.value = avatar;

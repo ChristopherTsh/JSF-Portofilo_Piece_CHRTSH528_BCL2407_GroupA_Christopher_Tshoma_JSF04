@@ -37,6 +37,12 @@
           >
             <ul class="py-1 text-sm text-gray-700 dark:text-white">
               <li
+                class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
+                @click="filterProductsByCategory('All')"
+              >
+                All/Default
+              </li>
+              <li
                 v-for="category in categories"
                 :key="category"
                 class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
@@ -185,10 +191,11 @@ export default {
 
     /**
      * Filters products based on the selected category.
+     * If 'All' is selected, it will show all products.
      * @param {string} category - The selected category.
      */
     const filterProductsByCategory = (category) => {
-      store.commit("setSelectedCategory", category);
+      store.commit("setSelectedCategory", category === 'All' ? '' : category);
       isCategoryDropdownOpen.value = false; // Close the dropdown after selecting a category
     };
 
@@ -208,13 +215,21 @@ export default {
       store.commit("setSearchTerm", searchTerm.value);
     };
 
+    /**
+     * Computed property to filter products based on selected criteria.
+     * It filters by category, search term, and applies sorting.
+     */
     const filteredProducts = computed(() => {
       let result = products.value;
+
+      // Filter by selected category
       if (store.getters.getSelectedCategory) {
         result = result.filter(
           (product) => product.category === store.getters.getSelectedCategory
         );
       }
+
+      // Filter by search term
       if (store.getters.getSearchTerm) {
         result = result.filter((product) =>
           product.title
@@ -222,6 +237,8 @@ export default {
             .includes(store.getters.getSearchTerm.toLowerCase())
         );
       }
+
+      // Sort products
       if (store.getters.getSortOption === "highest") {
         result = result.sort((a, b) => b.price - a.price);
       } else if (store.getters.getSortOption === "lowest") {
@@ -237,7 +254,10 @@ export default {
       try {
         const response = await axios.get("https://fakestoreapi.com/products");
         products.value = response.data;
+
+        // Adding "All/Default" to categories and ensuring uniqueness
         categories.value = [
+          "All",
           ...new Set(response.data.map((product) => product.category)),
         ];
       } catch (err) {
