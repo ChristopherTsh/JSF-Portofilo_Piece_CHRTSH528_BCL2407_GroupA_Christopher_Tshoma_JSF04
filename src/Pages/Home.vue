@@ -8,15 +8,16 @@
     </div>
     <div v-else>
       <!-- Dropdown for Categories -->
-      <div class="flex justify-center space-x-4 mb-4 mt-4">
+      <div class="flex justify-center space-x-4 mb-6 mt-4 flex-wrap">
         <div class="relative inline-flex">
           <button
             @click="toggleDropdown"
-            class="text-white bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg dark:bg-blue-600 focus:outline-none dark:focus:ring-blue-800 hover:bg-blue-800 dark:hover:bg-blue-700 text-sm px-4 py-2 inline-flex items-center"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 focus:outline-none text-sm px-4 py-2 inline-flex items-center transition duration-200 ease-in-out"
           >
-            {{ selectedCategory || "Category" }}
+            {{ selectedCategory || "Select Category" }}
             <svg
-              class="w-4 h-4 ml-2"
+              class="w-4 h-4 ml-2 transition-transform duration-200"
+              :class="{ 'rotate-180': isCategoryDropdownOpen }"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -32,15 +33,13 @@
           </button>
           <div
             v-if="isCategoryDropdownOpen"
-            class="absolute z-10 bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 left-0 mt-2"
+            class="absolute z-10 mt-2 bg-white dark:bg-gray-700 shadow-lg rounded-lg w-48"
           >
-            <ul
-              class="overflow-hidden w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            >
+            <ul class="py-1 text-sm text-gray-700 dark:text-white">
               <li
                 v-for="category in categories"
                 :key="category"
-                class="inline-flex items-center w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600 cursor-pointer"
+                class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                 @click="filterProductsByCategory(category)"
               >
                 {{ category }}
@@ -53,11 +52,12 @@
         <div class="relative inline-flex">
           <button
             @click="toggleSortDropdown"
-            class="text-white bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg dark:bg-blue-600 focus:outline-none dark:focus:ring-blue-800 hover:bg-blue-800 dark:hover:bg-blue-700 text-sm px-4 py-2 inline-flex items-center"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 focus:outline-none text-sm px-4 py-2 inline-flex items-center transition duration-200 ease-in-out"
           >
-            {{ selectedSortOption || "Sort" }}
+            {{ selectedSortOption || "Sort By" }}
             <svg
-              class="w-4 h-4 ml-2"
+              class="w-4 h-4 ml-2 transition-transform duration-200"
+              :class="{ 'rotate-180': isSortDropdownOpen }"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -73,19 +73,17 @@
           </button>
           <div
             v-if="isSortDropdownOpen"
-            class="absolute z-10 bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 left-0 mt-2"
+            class="absolute z-10 mt-2 bg-white dark:bg-gray-700 shadow-lg rounded-lg w-48"
           >
-            <ul
-              class="overflow-hidden w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            >
+            <ul class="py-1 text-sm text-gray-700 dark:text-white">
               <li
-                class="inline-flex items-center w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600 cursor-pointer"
+                class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                 @click="sortProducts('highest')"
               >
                 Price: High to Low
               </li>
               <li
-                class="inline-flex items-center w-full px-4 py-2 border-b border-gray-200 dark:border-gray-600 cursor-pointer"
+                class="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                 @click="sortProducts('lowest')"
               >
                 Price: Low to High
@@ -94,20 +92,20 @@
           </div>
         </div>
 
-        <!-- Search Bar -->
-        <div class="sm:hidden md:hidden lg:relative inline-flex">
+        <!-- Search Bar (Visible on large devices only) -->
+        <div class="hidden lg:flex items-center">
           <input
             v-model="searchTerm"
             type="text"
-            class="text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm px-4 py-2"
+            class="text-gray-900 bg-white border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm rounded-lg px-4 py-2 w-full lg:w-auto"
             placeholder="Search by title..."
           />
           <button
             @click="searchProducts"
-            class="text-white bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg dark:bg-blue-600 focus:outline-none dark:focus:ring-blue-800 hover:bg-blue-800 dark:hover:bg-blue-700 text-sm px-4 py-2 inline-flex items-center"
+            class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 focus:outline-none text-sm px-4 py-2 inline-flex items-center transition duration-200 ease-in-out"
           >
             <svg
-              class="w-4 h-4 ml-2"
+              class="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -123,9 +121,9 @@
 
       <!-- Product List -->
       <div class="container mx-auto p-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <ProductCard
-            v-for="product in products"
+            v-for="product in filteredProducts"
             :key="product.id"
             :dark-card="false"
             :card-image="product.image"
@@ -232,29 +230,30 @@ export default {
       return result;
     });
 
-    const searchTerm = ref(store.getters.getSearchTerm);
-
-    watch(searchTerm, (newTerm) => {
-      store.commit("setSearchTerm", newTerm);
-    });
-
+    /**
+     * Fetches products and categories data from the API on component mount.
+     */
     onMounted(async () => {
       try {
-        const productsResponse = await axios.get(
-          "https://fakestoreapi.com/products"
-        );
-        products.value = productsResponse.data;
-
-        const categoriesResponse = await axios.get(
-          "https://fakestoreapi.com/products/categories"
-        );
-        categories.value = categoriesResponse.data;
-        loading.value = false;
-      } catch (fetchError) {
-        console.error("Error fetching data:", fetchError);
+        const response = await axios.get("https://fakestoreapi.com/products");
+        products.value = response.data;
+        categories.value = [
+          ...new Set(response.data.map((product) => product.category)),
+        ];
+      } catch (err) {
         error.value = true;
+      } finally {
         loading.value = false;
       }
+    });
+
+    const searchTerm = ref("");
+
+    /**
+     * Watches for changes in the search term and triggers product search.
+     */
+    watch(searchTerm, (newTerm) => {
+      store.commit("setSearchTerm", newTerm);
     });
 
     return {
@@ -264,16 +263,20 @@ export default {
       isSortDropdownOpen,
       selectedCategory,
       selectedSortOption,
+      searchTerm,
+      loading,
+      error,
+      filteredProducts,
       toggleDropdown,
       toggleSortDropdown,
       filterProductsByCategory,
       sortProducts,
-      searchTerm,
       searchProducts,
-      filteredProducts,
-      loading,
-      error,
     };
   },
 };
 </script>
+
+<style scoped>
+/* Add any custom styles here */
+</style>
