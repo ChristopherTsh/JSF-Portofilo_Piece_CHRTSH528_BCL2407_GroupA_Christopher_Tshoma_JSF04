@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paypal/paypal-js": "^8.1.0",
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "class-variance-authority": "^0.7.0",

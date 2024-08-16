@@ -7,6 +7,9 @@ import Wishlist from '../Pages/Wishlist.vue';
 import Login from '../Pages/Login.vue';
 import store from '../store/store';
 import Comparison from '../Pages/Comparison.vue';
+import PaymentConfirmation from '../components/PaymentConfirmation.vue';
+import Checkout from '../Pages/Checkout.vue';
+
 
 const routes = [
   {
@@ -65,6 +68,16 @@ const routes = [
         next('/login');
       }
     }
+  },
+  {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout
+  },
+  {
+    path: '/payment-confirmation',
+    name: 'PaymentConfirmation',
+    component: PaymentConfirmation
   },
 ];
 

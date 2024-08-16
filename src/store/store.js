@@ -86,6 +86,13 @@ const store = createStore({
     resetComparison({ commit }) {
       commit('resetComparison');
     },
+    proceedToPayPal({ state }) {
+      // Redirect to PayPal with the total amount from the cart
+      const cartTotal = state.cart.reduce((total, product) => total + (product.price * product.quantity), 0);
+      const discountedTotal = cartTotal * (state.cart.length >= 5 ? 0.9 : 1);
+
+      window.location.href = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=YOUR_PAYPAL_EMAIL&amount=${discountedTotal.toFixed(2)}&currency_code=USD&item_name=Cart Total`;
+    },
   },
   getters: {
     getSelectedCategory(state) {
