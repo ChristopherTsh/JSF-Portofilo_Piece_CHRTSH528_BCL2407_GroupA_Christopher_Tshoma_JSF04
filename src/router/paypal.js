@@ -28,8 +28,9 @@ router.post('/create-payment', async (req, res) => {
 
   try {
     const order = await client.execute(request);
-    res.json({ redirectUrl: order.result.links[1].href });
+    res.json({ redirectUrl: order.result.links.find(link => link.rel === 'approve').href });
   } catch (error) {
+    console.error(error);
     res.status(500).send('Payment creation failed');
   }
 });
@@ -48,6 +49,7 @@ router.post('/verify-payment', async (req, res) => {
       res.json({ status: 'failed' });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).send('Payment verification failed');
   }
 });

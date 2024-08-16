@@ -80,18 +80,29 @@ const store = createStore({
     },
   },
   actions: {
-    addToComparison({ commit }, product) {
-      commit('addToComparison', product);
-    },
-    resetComparison({ commit }) {
-      commit('resetComparison');
-    },
-    proceedToPayPal({ state }) {
-      // Redirect to PayPal with the total amount from the cart
+    async proceedToPayPal({ state }) {
       const cartTotal = state.cart.reduce((total, product) => total + (product.price * product.quantity), 0);
       const discountedTotal = cartTotal * (state.cart.length >= 5 ? 0.9 : 1);
-
-      window.location.href = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=YOUR_PAYPAL_EMAIL&amount=${discountedTotal.toFixed(2)}&currency_code=USD&item_name=Cart Total`;
+    
+      // Use the PayPal URL for the sandbox environment for testing
+      const paypalUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+      
+      // Create the query string with necessary parameters
+      const queryString = new URLSearchParams({
+        cmd: '_xclick',
+        business: 'YOUR_PAYPAL_EMAIL', // Replace with your actual PayPal business email
+        amount: discountedTotal.toFixed(2),
+        currency_code: 'USD',
+        item_name: 'Cart Total',
+        return: 'http://yourdomain.com/payment-confirmation', // Replace with your confirmation page URL
+        cancel_return: 'http://yourdomain.com/cart' // Replace with your cancellation page URL
+      }).toString();
+    
+      // Log the full URL for debugging
+      console.log(`${paypalUrl}?${queryString}`);
+    
+      // Redirect to PayPal
+      window.location.href = `${paypalUrl}?${queryString}`;
     },
   },
   getters: {

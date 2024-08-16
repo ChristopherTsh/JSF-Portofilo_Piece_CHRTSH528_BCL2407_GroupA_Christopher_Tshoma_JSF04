@@ -35,6 +35,11 @@
       this.$on('payment-error', this.handlePaymentError);
       this.$on('payment-cancel', this.handlePaymentCancel);
     },
+    beforeDestroy() {
+      this.$off('payment-success', this.handlePaymentSuccess);
+      this.$off('payment-error', this.handlePaymentError);
+      this.$off('payment-cancel', this.handlePaymentCancel);
+    },
     methods: {
       handlePaymentSuccess(details) {
         this.paymentSuccess = true;
