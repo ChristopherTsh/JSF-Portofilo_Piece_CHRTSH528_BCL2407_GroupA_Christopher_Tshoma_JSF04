@@ -90,9 +90,9 @@
                 </div>
               </div>
 
-              <a href="/" class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-black hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                Proceed to Checkout
-              </a>
+              <button @click="proceedToPayPal" class="flex w-full items-center justify-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-black hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                Proceed to Checkout with PayPal
+              </button>
 
               <div class="flex items-center justify-center gap-2">
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
@@ -115,11 +115,10 @@
                   <label for="voucher" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
                     Do you have a voucher or gift card?
                   </label>
-                  <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-600 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Enter voucher or gift card" />
+                  <input type="text" id="voucher" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white" placeholder="Voucher code" />
                 </div>
-
-                <button type="submit" class="w-full rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                  Redeem
+                <button type="submit" class="w-full rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                  Apply Voucher
                 </button>
               </form>
             </div>
@@ -131,47 +130,23 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
-  setup() {
-    const store = useStore();
-    
-    const cart = computed(() => store.state.cart);
-
-    const discountItemsCount = computed(() => {
-      return cart.value.filter(item => item.isSaleItem).reduce((count, item) => count + item.quantity, 0);
-    });
-
-    const cartTotal = computed(() => {
-      return cart.value.reduce((total, item) => total + item.price * item.quantity, 0);
-    });
-
-    const discountedTotal = computed(() => {
-      return discountItemsCount.value >= 5 ? cartTotal.value * 0.9 : cartTotal.value;
-    });
-
-    return {
-      cart,
-      discountItemsCount,
-      cartTotal,
-      discountedTotal,
-    };
+  computed: {
+    ...mapState(["cart"]),
+    ...mapGetters(["cartTotal"]),
+    discountedTotal() {
+      const discount = this.discountItemsCount >= 5 ? 0.1 : 0;
+      return this.cartTotal * (1 - discount);
+    },
+    discountItemsCount() {
+      return this.cart.length;
+    },
   },
   methods: {
-    incrementQuantity(productId) {
-      this.$store.commit('incrementQuantity', productId);
-    },
-    decrementQuantity(productId) {
-      this.$store.commit('decrementQuantity', productId);
-    },
-    removeFromCart(productId) {
-      this.$store.commit('removeFromCart', productId);
-    },
-    addToFavorites(productId) {
-      // Add to favorites logic here
-    },
-  }
+    ...mapMutations(["incrementQuantity", "decrementQuantity", "removeFromCart"]),
+    ...mapActions(["proceedToPayPal"]),
+  },
 };
 </script>
