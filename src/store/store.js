@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import persistState from './persistState';
+import jwt_decode from 'jwt-decode';
 
 const store = createStore({
   state: {
@@ -9,6 +10,8 @@ const store = createStore({
     cart: [],
     wishlist: [],
     user: null,
+    usersData: {}, // Store data for all users by userId
+    currentUser: null, // Store current user's data
     isAuthenticated: false,
     comparisonList: [],
   },
@@ -23,15 +26,17 @@ const store = createStore({
       state.searchTerm = term;
     },
     addToCart(state, product) {
-      const existingProduct = state.cart.find(item => item.id === product.id);
+      const userId = state.currentUser.userId;
+      const existingProduct = state.usersData[userId].cart.find(item => item.id === product.id);
       if (existingProduct) {
         existingProduct.quantity += 1;
       } else {
-        state.cart.push({ ...product, quantity: 1 });
+        state.usersData[userId].cart.push({ ...product, quantity: 1 });
       }
     },
     removeFromCart(state, productId) {
-      state.cart = state.cart.filter(product => product.id !== productId);
+      const userId = state.currentUser.userId;
+      state.usersData[userId].cart = state.usersData[userId].cart.filter(product => product.id !== productId);
     },
     incrementQuantity(state, productId) {
       const product = state.cart.find(item => item.id === productId);
@@ -46,15 +51,17 @@ const store = createStore({
       }
     },
     addToWishlist(state, product) {
-      const existingProduct = state.wishlist.find(item => item.id === product.id);
+      const userId = state.currentUser.userId;
+      const existingProduct = state.usersData[userId].wishlist.find(item => item.id === product.id);
       if (!existingProduct) {
-        state.wishlist.push(product);
-        console.log(state.wishlist);
+        state.usersData[userId].wishlist.push(product);
       }
     },
     removeFromWishlist(state, productId) {
-      state.wishlist = state.wishlist.filter(product => product.id !== productId);
+      const userId = state.currentUser.userId;
+      state.usersData[userId].wishlist = state.usersData[userId].wishlist.filter(product => product.id !== productId);
     },
+    // Similar mutations for comparisonList and other user-specific data...
     addToComparison(state, product) {
       const existingProduct = state.comparisonList.find(item => item.id === product.id);
       if (!existingProduct && state.comparisonList.length < 4) {
@@ -68,11 +75,25 @@ const store = createStore({
       state.comparisonList = [];
     },
     setUser(state, { token, nickname, avatar }) {
-      state.user = { token, nickname, avatar };
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId; // Assuming the token contains the userId
+
+      state.currentUser = { userId, token, nickname, avatar };
       state.isAuthenticated = true;
+
+      if (!state.usersData[userId]) {
+        state.usersData[userId] = {
+          cart: [],
+          wishlist: [],
+          comparisonList: [],
+          token,
+          nickname,
+          avatar,
+        };
+      }
     },
     logout(state) {
-      state.user = null;
+      state.currentUser = null;
       state.isAuthenticated = false;
     },
     setState(state, newState) {
@@ -116,7 +137,18 @@ const store = createStore({
       return state.searchTerm;
     },
     cartTotal(state) {
-      return state.cart.reduce((total, product) => total + (product.price * product.quantity), 0);
+      const userId = state.currentUser?.userId;
+      return userId
+        ? state.usersData[userId].cart.reduce((total, product) => total + (product.price * product.quantity), 0)
+        : 0;
+    },
+    getCart(state) {
+      const userId = state.currentUser?.userId;
+      return userId ? state.usersData[userId].cart : [];
+    },
+    getWishlist(state) {
+      const userId = state.currentUser?.userId;
+      return userId ? state.usersData[userId].wishlist : [];
     },
     isAuthenticated(state) {
       return !!state.isAuthenticated;
