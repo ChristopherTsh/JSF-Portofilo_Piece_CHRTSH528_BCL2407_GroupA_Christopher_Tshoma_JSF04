@@ -12,8 +12,7 @@
             v-for="avatar in avatars" 
             :key="avatar" 
             @click="selectAvatar(avatar)" 
-            :class="['cursor-pointer', selectedAvatar === avatar ? 'ring-4 ring-blue-500' : '']"
-            class="p-1 rounded-lg bg-gray-200 dark:bg-gray-700"
+            :class="['cursor-pointer', selectedAvatar === avatar ? 'ring-4 ring-blue-500' : '', 'p-1 rounded-lg bg-gray-200 dark:bg-gray-700']"
           >
             <img :src="`/avatars/${avatar}`" alt="Avatar" class="w-full h-full object-cover rounded-lg" />
           </div>
@@ -50,14 +49,15 @@ export default {
     const showModal = ref(false);
     const router = useRouter();
     const store = useStore();
-
-    const avatars = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png','avatar5.png','avatar6.png'];
+    
+    const avatars = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png', 'avatar5.png', 'avatar6.png'];
 
     const selectAvatar = (avatar) => {
       selectedAvatar.value = avatar;
     };
 
     const login = async () => {
+      loginError.value = null;
       try {
         const response = await fetch('https://fakestoreapi.com/auth/login', {
           method: 'POST',
@@ -69,12 +69,13 @@ export default {
 
         const data = await response.json();
         if (data.token) {
-          store.commit('setUser', { token: data.token, nickname: nickname.value, avatar: selectedAvatar.value });
+          store.commit('setUser', { 
+            token: data.token, 
+            nickname: nickname.value, 
+            avatar: selectedAvatar.value 
+          });
           showModal.value = true;
-          setTimeout(() => {
-            showModal.value = false;
-            router.push('/');
-          }, 2000);
+          router.push('/checkout');
         }
       } catch (error) {
         loginError.value = error.message;
@@ -84,9 +85,19 @@ export default {
     const navigateToSignup = () => router.push('/signup');
     const navigateToForgotPassword = () => router.push('/forgot-password');
 
-    return { username, password, nickname, selectedAvatar, avatars, selectAvatar, login, navigateToSignup, navigateToForgotPassword, loginError, showModal };
-  }
+    return {
+      username,
+      password,
+      nickname,
+      selectedAvatar,
+      avatars,
+      selectAvatar,
+      login,
+      navigateToSignup,
+      navigateToForgotPassword,
+      loginError,
+      showModal,
+    };
+  },
 };
 </script>
-
-

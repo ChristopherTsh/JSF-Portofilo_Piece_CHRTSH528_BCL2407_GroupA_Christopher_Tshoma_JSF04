@@ -27,61 +27,77 @@ const store = createStore({
       state.searchTerm = term;
     },
     addToCart(state, product) {
-      const userId = state.currentUser.userId;
-      const existingProduct = state.usersData[userId].cart.find(item => item.id === product.id);
-      if (existingProduct) {
-        existingProduct.quantity += 1;
-      } else {
-        state.usersData[userId].cart.push({ ...product, quantity: 1 });
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        const existingProduct = state.usersData[userId].cart.find(item => item.id === product.id);
+        if (existingProduct) {
+          existingProduct.quantity += 1;
+        } else {
+          state.usersData[userId].cart.push({ ...product, quantity: 1 });
+        }
       }
     },
     removeFromCart(state, productId) {
-      const userId = state.currentUser.userId;
-      state.usersData[userId].cart = state.usersData[userId].cart.filter(product => product.id !== productId);
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        state.usersData[userId].cart = state.usersData[userId].cart.filter(product => product.id !== productId);
+      }
     },
     incrementQuantity(state, productId) {
-      const userId = state.currentUser.userId;
-      const product = state.usersData[userId].cart.find(item => item.id === productId);
-      if (product) {
-        product.quantity++;
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        const product = state.usersData[userId].cart.find(item => item.id === productId);
+        if (product) {
+          product.quantity++;
+        }
       }
     },
     decrementQuantity(state, productId) {
-      const userId = state.currentUser.userId;
-      const product = state.usersData[userId].cart.find(item => item.id === productId);
-      if (product && product.quantity > 1) {
-        product.quantity--;
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        const product = state.usersData[userId].cart.find(item => item.id === productId);
+        if (product && product.quantity > 1) {
+          product.quantity--;
+        }
       }
     },
     addToWishlist(state, product) {
-      const userId = state.currentUser.userId;
-      const existingProduct = state.usersData[userId].wishlist.find(item => item.id === product.id);
-      if (!existingProduct) {
-        state.usersData[userId].wishlist.push(product);
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        const existingProduct = state.usersData[userId].wishlist.find(item => item.id === product.id);
+        if (!existingProduct) {
+          state.usersData[userId].wishlist.push(product);
+        }
       }
-
-      console.log(state.usersData[userId].wishlist)
     },
     removeFromWishlist(state, productId) {
-      const userId = state.currentUser.userId;
-      state.usersData[userId].wishlist = state.usersData[userId].wishlist.filter(product => product.id !== productId);
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        state.usersData[userId].wishlist = state.usersData[userId].wishlist.filter(product => product.id !== productId);
+      }
     },
     addToComparison(state, product) {
-      const userId = state.currentUser.userId;
-      const existingProduct = state.usersData[userId].comparisonList.find(item => item.id === product.id);
-      if (!existingProduct && state.usersData[userId].comparisonList.length < 4) {
-        state.usersData[userId].comparisonList.push(product);
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        const existingProduct = state.usersData[userId].comparisonList.find(item => item.id === product.id);
+        if (!existingProduct && state.usersData[userId].comparisonList.length < 4) {
+          state.usersData[userId].comparisonList.push(product);
+        }
       }
     },
     removeFromComparison(state, productId) {
-      const userId = state.currentUser.userId;
-      state.usersData[userId].comparisonList = state.usersData[userId].comparisonList.filter(product => product.id !== productId);
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        state.usersData[userId].comparisonList = state.usersData[userId].comparisonList.filter(product => product.id !== productId);
+      }
     },
     resetComparison(state) {
-      const userId = state.currentUser.userId;
-      state.usersData[userId].comparisonList = [];
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        state.usersData[userId].comparisonList = [];
+      }
     },
-    setUser(state, { token, nickname, avatar }) {
+    setUser(state, { token, nickname = '', avatar = '' }) {
       const decodedToken = jwtDecode(token); // Decode the JWT
       const userId = decodedToken.sub; // Assuming the token contains the userId
 
@@ -98,8 +114,6 @@ const store = createStore({
           avatar,
         };
       }
-
-      console.log(state.currentUser )
     },
     logout(state) {
       state.currentUser = null;
@@ -112,24 +126,26 @@ const store = createStore({
   actions: {
     async proceedToPayPal({ state }) {
       const userId = state.currentUser?.userId;
-      const cartTotal = state.usersData[userId].cart.reduce((total, product) => total + (product.price * product.quantity), 0);
-      const discountedTotal = cartTotal * (state.usersData[userId].cart.length >= 5 ? 0.9 : 1);
+      if (userId) {
+        const cartTotal = state.usersData[userId].cart.reduce((total, product) => total + (product.price * product.quantity), 0);
+        const discountedTotal = cartTotal * (state.usersData[userId].cart.length >= 5 ? 0.9 : 1);
 
-      const paypalUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
+        const paypalUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 
-      const queryString = new URLSearchParams({
-        cmd: '_xclick',
-        business: 'YOUR_PAYPAL_EMAIL',
-        amount: discountedTotal.toFixed(2),
-        currency_code: 'USD',
-        item_name: 'Cart Total',
-        return: 'http://yourdomain.com/payment-confirmation',
-        cancel_return: 'http://yourdomain.com/cart',
-      }).toString();
+        const queryString = new URLSearchParams({
+          cmd: '_xclick',
+          business: 'YOUR_PAYPAL_EMAIL',
+          amount: discountedTotal.toFixed(2),
+          currency_code: 'USD',
+          item_name: 'Cart Total',
+          return: 'http://yourdomain.com/payment-confirmation',
+          cancel_return: 'http://yourdomain.com/cart',
+        }).toString();
 
-      console.log(`${paypalUrl}?${queryString}`);
+        console.log(`${paypalUrl}?${queryString}`);
 
-      window.location.href = `${paypalUrl}?${queryString}`;
+        window.location.href = `${paypalUrl}?${queryString}`;
+      }
     },
   },
   getters: {
@@ -159,7 +175,10 @@ const store = createStore({
     isAuthenticated(state) {
       return !!state.isAuthenticated;
     },
-    comparisonList: state => state.comparisonList,
+    comparisonList: state => {
+      const userId = state.currentUser?.userId;
+      return userId ? state.usersData[userId].comparisonList : [];
+    },
   },
   plugins: [persistState()],
 });
