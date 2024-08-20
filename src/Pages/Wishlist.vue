@@ -117,8 +117,9 @@
   export default {
     setup() {
       const store = useStore();
+      const userId = store.state.currentUser.userId
   
-      const wishlist = computed(() => store.state.wishlist);
+      const wishlist = computed(() => store.state.usersData[userId].wishlist);
       const removeFromWishlist = (productId) => {
         store.commit('removeFromWishlist', productId);
       };

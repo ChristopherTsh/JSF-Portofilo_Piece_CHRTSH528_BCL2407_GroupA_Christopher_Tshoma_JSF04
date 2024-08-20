@@ -184,8 +184,11 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const comparisonList = computed(() => store.getters.comparisonList);
+const comparisonList = computed(() => store.state.usersData[userId].comparisonList);
 const selectedCategory = ref('all');
+const userId = store.state.currentUser.userId
+  
+     
 
 // Limit the number of products to 4
 store.subscribe((mutation, state) => {

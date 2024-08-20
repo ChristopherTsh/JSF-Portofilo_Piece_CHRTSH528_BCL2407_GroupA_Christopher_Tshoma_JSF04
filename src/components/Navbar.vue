@@ -190,9 +190,14 @@ export default {
       menuOpen.value = !menuOpen.value;
     };
 
+    const userId = store.state.currentUser.userId
+  
+      // const wishlist = computed(() => store.state.usersData[userId].wishlist);
+
+    
     const isAuthenticated = computed(() => store.getters.isAuthenticated);
-    const userAvatar = computed(() => store.state.user?.avatar || '');
-const userNickname = computed(() => store.state.user?.nickname || 'User');
+    const userAvatar = computed(() => store.state.currentUser?.avatar || '');
+const userNickname = computed(() => store.state.currentUser?.nickname || 'User');
 
     const logout = () => {
       store.commit('logout');

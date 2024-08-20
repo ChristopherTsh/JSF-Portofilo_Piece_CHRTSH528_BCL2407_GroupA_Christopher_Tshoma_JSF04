@@ -159,29 +159,34 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { useStore, mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { useRouter } from "vue-router";
 
 export default {
   setup() {
+    const store = useStore();
     const router = useRouter();
 
     const goToCheckout = () => {
       router.push("/checkout");
     };
+    const userId = store.state.currentUser?.userId;
+    const cart = userId ? store.state.usersData[userId].cart : [];
 
     return {
       goToCheckout,
+      cart,
     };
   },
   computed: {
-    ...mapState(["cart"]),
+    ...mapGetters(["getCart"]),
     ...mapGetters(["cartTotal"]),
     discountedTotal() {
       const discount = this.discountItemsCount >= 5 ? 0.1 : 0;
       return this.cartTotal * (1 - discount);
     },
     discountItemsCount() {
+      console.log(this.cart)
       return this.cart.length;
     },
   },

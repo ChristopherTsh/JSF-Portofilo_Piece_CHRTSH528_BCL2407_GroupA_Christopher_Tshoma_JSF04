@@ -59,6 +59,8 @@ const store = createStore({
       if (!existingProduct) {
         state.usersData[userId].wishlist.push(product);
       }
+
+      console.log(state.usersData[userId].wishlist)
     },
     removeFromWishlist(state, productId) {
       const userId = state.currentUser.userId;
@@ -81,7 +83,7 @@ const store = createStore({
     },
     setUser(state, { token, nickname, avatar }) {
       const decodedToken = jwtDecode(token); // Decode the JWT
-      const userId = decodedToken.userId; // Assuming the token contains the userId
+      const userId = decodedToken.sub; // Assuming the token contains the userId
 
       state.currentUser = { userId, token, nickname, avatar };
       state.isAuthenticated = true;
@@ -96,6 +98,8 @@ const store = createStore({
           avatar,
         };
       }
+
+      console.log(state.currentUser )
     },
     logout(state) {
       state.currentUser = null;

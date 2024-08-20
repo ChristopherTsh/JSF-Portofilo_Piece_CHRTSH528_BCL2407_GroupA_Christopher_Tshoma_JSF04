@@ -108,10 +108,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  cardRatings:{
-    type: String,
-    default: "",
-  }
+  // cardRatings:{
+  //   type: Object,
+  //   required: true,
+  // }
 });
 
 const store = useStore();
@@ -149,7 +149,6 @@ const toggleWishlist = () => {
     });
     // console.log(`Product ${props.cardId} added to wishlist`);
   }
-  console.log(props.cardRatings)
 };
 
 // Method to toggle cart status
