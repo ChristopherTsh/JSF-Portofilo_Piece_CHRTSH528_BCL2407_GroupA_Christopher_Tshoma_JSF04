@@ -97,13 +97,15 @@ const store = createStore({
         state.usersData[userId].comparisonList = [];
       }
     },
-    setUser(state, { token, nickname = '', avatar = '' }) {
-      const decodedToken = jwtDecode(token); // Decode the JWT
-      const userId = decodedToken.sub; // Assuming the token contains the userId
-
+    setUser(state, { token, nickname = '', avatar = '', userData }) {
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.sub;
+  
+      // Set current user state
       state.currentUser = { userId, token, nickname, avatar };
       state.isAuthenticated = true;
-
+  
+      // Initialize user data if not already present
       if (!state.usersData[userId]) {
         state.usersData[userId] = {
           cart: [],
@@ -112,8 +114,21 @@ const store = createStore({
           token,
           nickname,
           avatar,
+          ...userData // Spread the userData to include additional fields
+        };
+      } else {
+        // Update existing user data if necessary
+        state.usersData[userId] = {
+          ...state.usersData[userId],
+          token,
+          nickname,
+          avatar,
+          ...userData // Ensure existing fields are updated
         };
       }
+
+      // Debug log to check if user data is correctly stored
+      console.log('User data stored in Vuex:', state.usersData[userId]);
     },
     logout(state) {
       state.currentUser = null;

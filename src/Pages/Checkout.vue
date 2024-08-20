@@ -27,29 +27,39 @@
         </div>
   
         <div>
-          <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Country</label>
-          <select
-            id="country"
-            v-model="country"
+          <label for="street" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Street</label>
+          <input
+            type="text"
+            id="street"
+            v-model="street"
+            placeholder="Street Address"
             class="mt-1 block w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          >
-            <option>United States</option>
-            <option>Australia</option>
-            <!-- Add other countries as needed -->
-          </select>
+            readonly
+          />
         </div>
   
         <div>
           <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">City</label>
-          <select
+          <input
+            type="text"
             id="city"
             v-model="city"
+            placeholder="City"
             class="mt-1 block w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          >
-            <option>San Francisco</option>
-            <option>New York</option>
-            <!-- Add other cities as needed -->
-          </select>
+            readonly
+          />
+        </div>
+  
+        <div>
+          <label for="zipcode" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Zipcode</label>
+          <input
+            type="text"
+            id="zipcode"
+            v-model="zipcode"
+            placeholder="Zipcode"
+            class="mt-1 block w-full p-3 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            readonly
+          />
         </div>
   
         <div>
@@ -71,35 +81,52 @@
   </template>
   
   <script>
-  import { computed, ref, watchEffect } from 'vue';
-  import { useStore } from 'vuex';
+import { computed, ref, watchEffect } from 'vue';
+import { useStore } from 'vuex';
+
+export default {
+  setup() {
+    const store = useStore();
+    const currentUser = computed(() => store.state.currentUser);
+    const userData = computed(() => store.state.usersData[currentUser.value?.userId]);
+
+    // Fields that should be populated with user data
+    const nickname = ref('');
+    const email = ref('');
+    const street = ref('');
+    const city = ref('');
+    const zipcode = ref('');
+    const phone = ref('');
+
+    // Watch for changes to userData and populate fields accordingly
+    watchEffect(() => {
+      console.log('Current User:', currentUser.value); // Check if currentUser is correct
+      console.log('User Data from Vuex:', userData.value); // Check if userData is populated
+
+      if (userData.value) {
+        nickname.value = currentUser.value?.nickname || '';
+        email.value = userData.value?.email || '';
+        street.value = userData.value?.address?.street || '';
+        city.value = userData.value?.address?.city || '';
+        zipcode.value = userData.value?.address?.zipcode || '';
+        phone.value = userData.value?.phone || '';
+
+        // Log the fields to ensure they're being set correctly
+        console.log('Nickname:', nickname.value);
+        console.log('Email:', email.value);
+        console.log('Street:', street.value);
+        console.log('City:', city.value);
+        console.log('Zipcode:', zipcode.value);
+        console.log('Phone:', phone.value);
+      } else {
+        console.log('No user data available in Vuex for the current user.');
+      }
+    });
+
+    return { nickname, email, street, city, zipcode, phone };
+  },
+};
+</script>
+
   
-  export default {
-    setup() {
-      const store = useStore();
-      const currentUser = computed(() => store.state.currentUser);
-      const userData = computed(() => store.state.usersData[currentUser.value?.userId]);
-  
-      // Prefill user data with refs
-      const nickname = ref('');
-      const email = ref('');
-      const country = ref('');
-      const city = ref('');
-      const phone = ref('');
-  
-      // Watch the user data and prefill the form when it changes
-      watchEffect(() => {
-        if (currentUser.value) {
-          nickname.value = currentUser.value.nickname || '';
-          email.value = userData.value?.email || '';
-          country.value = userData.value?.address?.country || 'United States';
-          city.value = userData.value?.address?.city || 'San Francisco';
-          phone.value = userData.value?.phone || '';
-        }
-      });
-  
-      return { nickname, email, country, city, phone };
-    },
-  };
-  </script>
   

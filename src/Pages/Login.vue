@@ -49,7 +49,7 @@ export default {
     const showModal = ref(false);
     const router = useRouter();
     const store = useStore();
-    
+
     const avatars = ['avatar1.png', 'avatar2.png', 'avatar3.png', 'avatar4.png', 'avatar5.png', 'avatar6.png'];
 
     const selectAvatar = (avatar) => {
@@ -57,30 +57,41 @@ export default {
     };
 
     const login = async () => {
-      loginError.value = null;
-      try {
-        const response = await fetch('https://fakestoreapi.com/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: username.value, password: password.value }),
+  loginError.value = null;
+  try {
+    // Authenticate the user
+    const response = await fetch('https://fakestoreapi.com/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: username.value, password: password.value }),
+    });
+
+    if (!response.ok) throw new Error('Incorrect username or password');
+
+    const data = await response.json();
+    if (data.token) {
+      // Fetch user details using the username
+      const userResponse = await fetch(`https://fakestoreapi.com/users`);
+      const users = await userResponse.json();
+      const user = users.find(u => u.username === username.value);
+
+      if (user) {
+        // Store user data in Vuex
+        store.commit('setUser', { 
+          token: data.token, 
+          nickname: nickname.value, 
+          avatar: selectedAvatar.value,
+          userData: user,  // Pass user data to Vuex
         });
-
-        if (!response.ok) throw new Error('Incorrect username or password');
-
-        const data = await response.json();
-        if (data.token) {
-          store.commit('setUser', { 
-            token: data.token, 
-            nickname: nickname.value, 
-            avatar: selectedAvatar.value 
-          });
-          showModal.value = true;
-          router.push('/checkout');
-        }
-      } catch (error) {
-        loginError.value = error.message;
+        showModal.value = true;
+        router.push('/checkout');
       }
-    };
+    }
+  } catch (error) {
+    loginError.value = error.message;
+  }
+};
+
 
     const navigateToSignup = () => router.push('/signup');
     const navigateToForgotPassword = () => router.push('/forgot-password');
