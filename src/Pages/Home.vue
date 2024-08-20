@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import {ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
 import ProductCard from "../components/ProductCard.vue";
 import LoadingPage from "../components/LoadingPage.vue";
@@ -218,6 +218,7 @@ export default {
     /**
      * Computed property to filter products based on selected criteria.
      * It filters by category, search term, and applies sorting.
+     * @returns {Array<Object>} The filtered list of products.
      */
     const filteredProducts = computed(() => {
       let result = products.value;
@@ -249,6 +250,7 @@ export default {
 
     /**
      * Fetches products and categories data from the API on component mount.
+     * Sets loading to false when the data is fetched or an error occurs.
      */
     onMounted(async () => {
       try {
@@ -271,6 +273,7 @@ export default {
 
     /**
      * Watches for changes in the search term and triggers product search.
+     * @param {string} newTerm - The new search term.
      */
     watch(searchTerm, (newTerm) => {
       store.commit("setSearchTerm", newTerm);
