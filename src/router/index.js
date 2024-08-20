@@ -53,6 +53,11 @@ const routes = [
     }
   },
   {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout
+  },
+  {
     path: '/login',
     name: 'Login',
     component: Login,
@@ -69,12 +74,7 @@ const routes = [
       }
     }
   },
-  {
-    path: '/checkout',
-    name: 'Checkout',
-    component: Checkout
-  },
-  {
+   {
     path: '/payment-confirmation',
     name: 'PaymentConfirmation',
     component: PaymentConfirmation
