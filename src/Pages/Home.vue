@@ -134,7 +134,7 @@
             :dark-card="false"
             :card-image="product.image"
             :card-title="product.title"
-            :cardRatings="product.ratings" 
+            :card-ratings="product.ratings" 
             :card-description="product.description"
             :card-price="product.price"
             :card-category="product.category"
@@ -148,7 +148,7 @@
 </template>
 
 <script>
-import { ref, onMounted, computed, watch } from "vue";
+import {ref, onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
 import ProductCard from "../components/ProductCard.vue";
 import LoadingPage from "../components/LoadingPage.vue";
