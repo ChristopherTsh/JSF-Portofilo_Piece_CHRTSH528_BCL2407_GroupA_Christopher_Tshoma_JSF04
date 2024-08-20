@@ -1,6 +1,7 @@
 import { createStore } from 'vuex';
 import persistState from './persistState';
-import jwt_decode from 'jwt-decode';
+// Import jwtDecode correctly using the named export
+import { jwtDecode } from "jwt-decode";
 
 const store = createStore({
   state: {
@@ -39,13 +40,15 @@ const store = createStore({
       state.usersData[userId].cart = state.usersData[userId].cart.filter(product => product.id !== productId);
     },
     incrementQuantity(state, productId) {
-      const product = state.cart.find(item => item.id === productId);
+      const userId = state.currentUser.userId;
+      const product = state.usersData[userId].cart.find(item => item.id === productId);
       if (product) {
         product.quantity++;
       }
     },
     decrementQuantity(state, productId) {
-      const product = state.cart.find(item => item.id === productId);
+      const userId = state.currentUser.userId;
+      const product = state.usersData[userId].cart.find(item => item.id === productId);
       if (product && product.quantity > 1) {
         product.quantity--;
       }
@@ -61,21 +64,23 @@ const store = createStore({
       const userId = state.currentUser.userId;
       state.usersData[userId].wishlist = state.usersData[userId].wishlist.filter(product => product.id !== productId);
     },
-    // Similar mutations for comparisonList and other user-specific data...
     addToComparison(state, product) {
-      const existingProduct = state.comparisonList.find(item => item.id === product.id);
-      if (!existingProduct && state.comparisonList.length < 4) {
-        state.comparisonList.push(product);
+      const userId = state.currentUser.userId;
+      const existingProduct = state.usersData[userId].comparisonList.find(item => item.id === product.id);
+      if (!existingProduct && state.usersData[userId].comparisonList.length < 4) {
+        state.usersData[userId].comparisonList.push(product);
       }
     },
     removeFromComparison(state, productId) {
-      state.comparisonList = state.comparisonList.filter(product => product.id !== productId);
+      const userId = state.currentUser.userId;
+      state.usersData[userId].comparisonList = state.usersData[userId].comparisonList.filter(product => product.id !== productId);
     },
     resetComparison(state) {
-      state.comparisonList = [];
+      const userId = state.currentUser.userId;
+      state.usersData[userId].comparisonList = [];
     },
     setUser(state, { token, nickname, avatar }) {
-      const decodedToken = jwt_decode(token);
+      const decodedToken = jwtDecode(token); // Decode the JWT
       const userId = decodedToken.userId; // Assuming the token contains the userId
 
       state.currentUser = { userId, token, nickname, avatar };
@@ -102,27 +107,24 @@ const store = createStore({
   },
   actions: {
     async proceedToPayPal({ state }) {
-      const cartTotal = state.cart.reduce((total, product) => total + (product.price * product.quantity), 0);
-      const discountedTotal = cartTotal * (state.cart.length >= 5 ? 0.9 : 1);
-    
-      // Use the PayPal URL for the sandbox environment for testing
+      const userId = state.currentUser?.userId;
+      const cartTotal = state.usersData[userId].cart.reduce((total, product) => total + (product.price * product.quantity), 0);
+      const discountedTotal = cartTotal * (state.usersData[userId].cart.length >= 5 ? 0.9 : 1);
+
       const paypalUrl = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
-      
-      // Create the query string with necessary parameters
+
       const queryString = new URLSearchParams({
         cmd: '_xclick',
-        business: 'YOUR_PAYPAL_EMAIL', // Replace with your actual PayPal business email
+        business: 'YOUR_PAYPAL_EMAIL',
         amount: discountedTotal.toFixed(2),
         currency_code: 'USD',
         item_name: 'Cart Total',
-        return: 'http://yourdomain.com/payment-confirmation', // Replace with your confirmation page URL
-        cancel_return: 'http://yourdomain.com/cart' // Replace with your cancellation page URL
+        return: 'http://yourdomain.com/payment-confirmation',
+        cancel_return: 'http://yourdomain.com/cart',
       }).toString();
-    
-      // Log the full URL for debugging
+
       console.log(`${paypalUrl}?${queryString}`);
-    
-      // Redirect to PayPal
+
       window.location.href = `${paypalUrl}?${queryString}`;
     },
   },
