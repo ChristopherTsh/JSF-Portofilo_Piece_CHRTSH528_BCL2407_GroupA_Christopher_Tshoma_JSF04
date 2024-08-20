@@ -14,8 +14,7 @@
     <div class="px-6 pt-4 pb-2 flex justify-between items-center">
       <button
         @click="toggleWishlist"
-        :class="{ 'icon-button active': isInWishlist }"
-        class="icon-button"
+        :class="['icon-button', { active: isInWishlist }]"
       >
         <svg
           width="24"
@@ -33,8 +32,7 @@
       </button>
       <button
         @click="toggleCart"
-        :class="{ 'icon-button active': isInCart }"
-        class="icon-button"
+        :class="['icon-button', { active: isInCart }]"
       >
         <svg
           width="24"
@@ -51,8 +49,8 @@
         </svg>
       </button>
       <button
-        @click="addToComparison"
-        :class="{ 'icon-button active': isInComparison }"
+        @click="toggleComparison"
+        :class="['icon-button', { active: isInComparison }]"
       >
         <svg
           width="24"
@@ -73,7 +71,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import Button from "./Button.vue";
@@ -108,10 +106,6 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  // cardRatings:{
-  //   type: Object,
-  //   required: true,
-  // }
 });
 
 const store = useStore();
@@ -119,44 +113,61 @@ const router = useRouter();
 
 const cardClass = computed(() => "max-w-sm rounded overflow-hidden shadow-lg p-6");
 
-// States for wishlist and cart
-const isInWishlist = computed(() =>
-  store.state.wishlist.some((product) => product.id === props.cardId)
-);
+const isInWishlist = ref(false);
 const isInCart = ref(false);
-const isInComparison = computed(() =>
-  store.state.comparisonList.some((product) => product.id === props.cardId)
-);
+const isInComparison = ref(false);
 
-// Method to navigate to product detail page
+onMounted(() => {
+  // Load wishlist status from localStorage
+  const wishlistState = localStorage.getItem(`wishlist_${props.cardId}`);
+  if (wishlistState) {
+    isInWishlist.value = JSON.parse(wishlistState);
+  }
+
+  // Load cart status from localStorage
+  const cartState = localStorage.getItem(`cart_${props.cardId}`);
+  if (cartState) {
+    isInCart.value = JSON.parse(cartState);
+  }
+
+  // Load comparison status from localStorage
+  const comparisonState = localStorage.getItem(`comparison_${props.cardId}`);
+  if (comparisonState) {
+    isInComparison.value = JSON.parse(comparisonState);
+  }
+});
+
 const viewProduct = () => {
   router.push(`/product/${props.cardId}`);
 };
 
-// Method to toggle wishlist status
 const toggleWishlist = () => {
+  isInWishlist.value = !isInWishlist.value;
   if (isInWishlist.value) {
-    store.commit("removeFromWishlist", props.cardId);
-    console.log(`Product ${props.cardId} removed from wishlist`);
-  } else {
     store.commit("addToWishlist", {
       id: props.cardId,
       title: props.cardTitle,
       price: props.cardPrice,
       image: props.cardImage,
       rating: props.cardRatings,
-      
     });
-    // console.log(`Product ${props.cardId} added to wishlist`);
+  } else {
+    store.commit("removeFromWishlist", props.cardId);
   }
+  console.log(
+    `Product ${props.cardId} ${
+      isInWishlist.value ? "added to" : "removed from"
+    } wishlist`
+  );
+  // Save wishlist status to localStorage
+  localStorage.setItem(`wishlist_${props.cardId}`, JSON.stringify(isInWishlist.value));
 };
 
-// Method to toggle cart status
 const toggleCart = () => {
   isInCart.value = !isInCart.value;
   if (isInCart.value) {
     store.commit("addToCart", {
-      id: props.cardId,
+      id: props.cardId      ,
       title: props.cardTitle,
       price: props.cardPrice,
       category: props.cardCategory,
@@ -170,20 +181,32 @@ const toggleCart = () => {
       isInCart.value ? "added to" : "removed from"
     } cart`
   );
+  // Save cart status to localStorage
+  localStorage.setItem(`cart_${props.cardId}`, JSON.stringify(isInCart.value));
 };
 
-// Method to add product to comparison list
-const addToComparison = () => {
-  store.commit("addToComparison", {
-    id: props.cardId,
-    title: props.cardTitle,
-    category: props.cardCategory,
-    price: props.cardPrice,
-    image: props.cardImage,
-    description: props.cardDescription,
-    rating: props.cardRatings,
-  });
-  // console.log(`Product ${props.cardId} added to comparison`);
+const toggleComparison = () => {
+  isInComparison.value = !isInComparison.value;
+  if (isInComparison.value) {
+    store.commit("addToComparison", {
+      id: props.cardId,
+      title: props.cardTitle,
+      category: props.cardCategory,
+      price: props.cardPrice,
+      image: props.cardImage,
+      description: props.cardDescription,
+      rating: props.cardRatings,
+    });
+  } else {
+    store.commit("removeFromComparison", props.cardId);
+  }
+  console.log(
+    `Product ${props.cardId} ${
+      isInComparison.value ? "added to" : "removed from"
+    } comparison`
+  );
+  // Save comparison status to localStorage
+  localStorage.setItem(`comparison_${props.cardId}`, JSON.stringify(isInComparison.value));
 };
 </script>
 
@@ -200,10 +223,11 @@ const addToComparison = () => {
 }
 
 .icon-button.active {
-  color: #007bff; /* Change to desired active color */
+  color: #007bff;
 }
 
 .icon-button svg {
   fill: currentColor;
 }
 </style>
+
