@@ -357,6 +357,39 @@
 import { useStore, mapState, mapMutations, mapActions, mapGetters } from "vuex";
 import { useRouter } from "vue-router";
 
+/**
+ * @file CartComponent.vue
+ * @description A Vue.js component representing a shopping cart page, displaying the cart items, order summary, and options to proceed to checkout or apply a voucher.
+ * 
+ * @template
+ * @section
+ * - Displays the shopping cart, order summary, and checkout options.
+ * - If the cart is empty, a message is shown.
+ * - Users can increase or decrease product quantities, add products to favorites, remove products from the cart, and proceed to checkout.
+ * 
+ * @script
+ * @import { useStore, mapState, mapMutations, mapActions, mapGetters } from "vuex";
+ * @import { useRouter } from "vue-router";
+ * 
+ * @setup
+ * - Retrieves the Vuex store and router instances.
+ * - Defines `goToCheckout` function to navigate to the checkout page.
+ * - Retrieves the current user's cart from Vuex state.
+ * 
+ * @computed
+ * @property {Array} cart - The current user's shopping cart.
+ * @property {Function} discountedTotal - Calculates the total price with any applicable discounts.
+ * @property {Function} discountItemsCount - Counts the number of items in the cart that are eligible for a discount.
+ * 
+ * @methods
+ * @method incrementQuantity - Increments the quantity of a specified product in the cart.
+ * @method decrementQuantity - Decrements the quantity of a specified product in the cart.
+ * @method removeFromCart - Removes a specified product from the cart.
+ * @method proceedToPayPal - Proceeds to PayPal for payment processing.
+ * 
+ * @return {Object} - Returns the necessary data and methods for the template.
+ */
+
 export default {
   setup() {
     const store = useStore();
