@@ -9,6 +9,14 @@
             Your wishlist is empty.
           </div>
           <div v-else>
+            <div class="flex justify-end mb-4">
+            <button
+              @click="removeAllFromWishlist"
+              class="py-2 px-4 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
+            >
+              Remove All Products
+            </button>
+          </div>
             <div
               v-for="product in wishlist"
               :key="product.id"
@@ -120,10 +128,26 @@
       const userId = store.state.currentUser.userId
   
       const wishlist = computed(() => store.state.usersData[userId].wishlist);
+
+      /**
+     * Removes a product from the wishlist based on the product ID.
+     * @param {number} productId - The ID of the product to be removed.
+     */
       const removeFromWishlist = (productId) => {
         store.commit('removeFromWishlist', productId);
       };
+
+      /**
+     * Removes all products from the wishlist.
+     */
+    const removeAllFromWishlist = () => {
+      store.commit('resetWishlist');
+    };
   
+    /**
+     * Adds a product to the cart.
+     * @param {Object} product - The product object to be added to the cart.
+     */
       const addToCart = (product) => {
         store.commit('addToCart', product);
       };
@@ -131,6 +155,7 @@
       return {
         wishlist,
         removeFromWishlist,
+        removeAllFromWishlist,
         addToCart,
       };
     }

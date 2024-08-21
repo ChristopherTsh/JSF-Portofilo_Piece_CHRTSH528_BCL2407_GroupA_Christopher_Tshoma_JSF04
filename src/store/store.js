@@ -17,6 +17,16 @@ const store = createStore({
     comparisonList: [],
   },
   mutations: {
+
+    resetWishlist(state) {
+      state.usersData[state.currentUser.userId].wishlist = [];
+    },
+    updateWishlistCounter(state) {
+      state.wishlistCount = state.usersData[state.currentUser.userId].wishlist.length;
+    },
+    updateCartCounter(state) {
+      state.cartCount = state.cart.length;
+    },
     setSelectedCategory(state, category) {
       state.selectedCategory = category;
     },
