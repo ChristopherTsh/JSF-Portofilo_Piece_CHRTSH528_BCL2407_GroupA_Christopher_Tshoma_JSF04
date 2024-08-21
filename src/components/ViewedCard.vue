@@ -81,7 +81,7 @@ onMounted(async () => {
             d="M12 .587l3.668 7.571 8.332 1.151-6.063 5.852 1.428 8.287L12 18.897l-7.365 3.851 1.428-8.287-6.063-5.852 8.332-1.151z"
           />
         </svg>
-        <span>({{ product.rating.count }} reviews)</span>
+        <span>({{ product.rating.count }}reviews)</span>
       </div>
       <div class="px-6 pt-4 pb-2">
         <Button @click="router.push('/')" intent="Go back">Go Back</Button>

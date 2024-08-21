@@ -71,7 +71,7 @@
                     />
                   </svg>
                   <span v-if="product.rating && product.rating.count"
-                    >({{ product.rating.count }} reviews)</span
+                    >({{ product.rating.count }}reviews)</span
                   >
                   <span v-else>(No reviews)</span>
                 </div>
