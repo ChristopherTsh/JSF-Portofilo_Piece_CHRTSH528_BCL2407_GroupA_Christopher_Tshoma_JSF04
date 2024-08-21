@@ -7,9 +7,12 @@ import Wishlist from '../Pages/Wishlist.vue';
 import Login from '../Pages/Login.vue';
 import store from '../store/store';
 import Comparison from '../Pages/Comparison.vue';
-// import PaymentConfirmation from '../components/PaymentConfirmation.vue';
 import Checkout from '../Pages/Checkout.vue';
 
+/**
+ * The list of route definitions for the Vue Router.
+ * @type {Array<import('vue-router').RouteRecordRaw>}
+ */
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/comparison', name: 'Comparison', component: Comparison, meta: { requiresAuth: true } },
@@ -19,14 +22,24 @@ const routes = [
   { path: '/checkout', name: 'Checkout', component: Checkout },
   { path: '/login', name: 'Login', component: Login },
   { path: '/wishlist', name: 'Wishlist', component: Wishlist, meta: { requiresAuth: true } },
-  // { path: '/payment-confirmation', name: 'PaymentConfirmation', component: PaymentConfirmation }
 ];
 
+/**
+ * Creates a new Vue Router instance with history mode and route definitions.
+ * @type {import('vue-router').Router}
+ */
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
 
+/**
+ * Global navigation guard for authentication.
+ * Redirects to the login page if the route requires authentication and the user is not authenticated.
+ * @param {import('vue-router').RouteLocationNormalized} to - The target RouteLocation.
+ * @param {import('vue-router').RouteLocationNormalized} from - The current RouteLocation.
+ * @param {Function} next - The function to call to resolve the hook.
+ */
 router.beforeEach((to, from, next) => {
   const isAuthenticated = store.getters.isAuthenticated;
 

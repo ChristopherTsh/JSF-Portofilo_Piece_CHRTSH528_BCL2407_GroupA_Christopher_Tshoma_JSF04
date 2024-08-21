@@ -184,28 +184,52 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const comparisonList = computed(() => store.state.usersData[userId].comparisonList);
-const selectedCategory = ref('all');
-const userId = store.state.currentUser.userId
-  
-     
 
-// Limit the number of products to 4
+/**
+ * List of products in the comparison.
+ * @type {ComputedRef<Array<Object>>}
+ */
+const comparisonList = computed(() => store.state.usersData[userId].comparisonList);
+
+/**
+ * The currently selected category for filtering.
+ * @type {Ref<string>}
+ */
+const selectedCategory = ref('all');
+
+/**
+ * The user ID of the currently logged-in user.
+ * @type {string}
+ */
+const userId = store.state.currentUser.userId;
+
+/**
+ * Removes the product with the given ID from the comparison list.
+ * @param {string} productId - The ID of the product to remove.
+ */
+const removeFromComparison = (productId) => {
+  store.commit('removeFromComparison', productId);
+};
+
+/**
+ * Resets the comparison list to empty.
+ */
+const resetComparison = () => {
+  store.commit('resetComparison');
+};
+
+/**
+ * Adds the specified product to the cart.
+ * @param {Object} product - The product to add to the cart.
+ */
+const addToCart = (product) => {
+  store.commit('addToCart', product);
+};
+
+// Limit the number of products in the comparison list to 4
 store.subscribe((mutation, state) => {
   if (state.comparisonList.length > 4) {
     state.comparisonList.pop();
   }
 });
-
-const removeFromComparison = (productId) => {
-  store.commit('removeFromComparison', productId);
-};
-
-const resetComparison = () => {
-  store.commit('resetComparison');
-};
-
-const addToCart = (product) => {
-  store.commit('addToCart', product);
-};
 </script>

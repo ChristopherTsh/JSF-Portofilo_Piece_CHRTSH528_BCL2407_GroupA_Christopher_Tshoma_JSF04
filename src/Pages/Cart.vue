@@ -349,7 +349,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, watchEffect } from "vue";
 import { useStore, mapMutations, mapActions, mapGetters } from "vuex";
 import { useRouter } from "vue-router";
 
@@ -396,6 +396,11 @@ export default {
     };
     const userId = store.state.currentUser?.userId;
     const cart = userId ? store.state.usersData[userId].cart : [];
+
+    watchEffect(() => {
+      console.log('w')
+    })
+    //watch cart items and cart total to recount item on item removal
 
     return {
       goToCheckout,
