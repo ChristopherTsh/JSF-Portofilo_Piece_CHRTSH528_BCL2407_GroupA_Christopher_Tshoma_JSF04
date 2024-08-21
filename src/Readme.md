@@ -1,39 +1,105 @@
-# Product Dashboard
+## Vue.Shop
 
-## Introduction
+This project showcases a Vue.js application with Vuex state management. It includes a sample Express server for state persistence and local storage.
 
-Welcome to the Product Dashboard project! This application is designed to provide a comprehensive view of products, including their details, wishlist management, and shopping cart functionalities.
+ # Project Overview
+This application features a shopping cart, wishlist, and comparison functionality, all managed via Vuex. The user data is stored and managed within the Vuex store, with state persistence using local storage and a sample Express server. 
 
-## Technologies Used
+# Technologies Used
+**Progressive :**JavaScript framework for building user interfaces.
+**Vuex:** State management pattern and library for Vue.js applications.
+**Express:** Web application framework for Node.js.
+**LocalStorage:** For state persistence on the client-side.
+ # Setup Instructions
+## Prerequisites
+-Node.js (v14 or higher)
+-npm (v6 or higher)
+-Vue CLI (for project setup)
+-Project Setup
+Clone the Repository
 
-- **Vue.js**: A progressive JavaScript framework for building user interfaces.
-- **Vue Router**: The official router for Vue.js, used for navigation.
-- **Vuex**: State management pattern + library for Vue.js applications.
-- **Axios**: A promise-based HTTP client for making requests.
-- **Tailwind CSS**: A utility-first CSS framework for styling.
 
-## Setup Instructions
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/ChristopherTsh/Module2-CHRTSH528-BCL2401_Christopher-Tshoma-JSF03.git
-   cd product-dashboard
+git clone https://github.com/yourusername/your-repo-name.git
+cd your-repo-name
+Install Dependencies
 
-## Install Dependencies
- npm install
 
-## Start the Development Server
-npm run serve
 
-##  Usage
-**Home Page:** View the list of products and navigate to individual product details.
-**Wishlist:** Manage your wishlist by adding or removing products.
-**Product Details:** See detailed information about a specific product, including price, description, and rating.
-**Cart:** Add products to your cart and proceed to checkout.
-##  Examples
-**Adding a Product to Wishlist**
-> Click the heart icon on the product card to add it to your wishlist.
-**Removing a Product from Wishlist**
->Click the "Remove from Wishlist" button on the wishlist page.
-**Viewing Product Details**
->Click on a product image or title to view detailed information about the product.
+# npm install
+Setup the Express Server
+
+Navigate to the server directory and install dependencies:
+
+
+
+# npm install
+Run the Express Server
+
+
+
+# npm start
+
+
+# Run the Vue.js Application
+
+Navigate back to the root project directory and start the Vue development server:
+
+
+
+cd ..
+# npm run serve
+
+
+# Vuex Store Overview
+The Vuex store manages the following state:
+
+**selectedCategory:** The currently selected product category.
+**sortOption:** The current sorting option for products.
+**searchTerm:** The current search term used.
+**cart:** Array of products in the cart.
+**wishlist:** Array of products in the wishlist.
+**user:** The current user object.
+**usersData:** Data associated with all users.
+**currentUser:** The currently logged-in user.
+**isAuthenticated:** Authentication status of the user.
+**comparisonList:** List of products for comparison.
+cartCount, wishlistCount, comparisonCount: Counts of items in the respective lists.
+**redirectAfterLogin:** Path to redirect to after login.
+Mutations
+Mutations modify the state and include operations like:
+
+## resetWishlist: Clears the wishlist for the current user.
+addToCart: Adds a product to the cart.
+**removeFromCart:** Removes a product from the cart.
+**clearCart:** Empties the cart.
+**addToWishlist:** Adds a product to the wishlist.
+**removeFromWishlist:** Removes a product from the wishlist.
+**addToComparison:** Adds a product to the comparison list.
+removeFromComparison:** Removes a product from the comparison list.
+**setUser:** Sets the current user and initializes user data.
+**logout:** Logs out the user and resets counts.
+**restoreCounts:** Restores cart, wishlist, and comparison counts after login.
+## Actions
+Actions perform asynchronous operations:
+
+
+## Getters
+Getters provide computed values based on the state:
+
+getRedirectAfterLogin
+getSelectedCategory
+getSortOption
+getSearchTerm
+cartTotal
+getCart
+getWishlist
+isAuthenticated
+comparisonList
+## Usage
+Adding/Removing Products: Use the Vuex mutations to manage products in the cart, wishlist, and comparison list.
+User Authentication: Manage user state and authentication status using the setUser and logout mutations.
+
+# Videos 
+[vercel](https://final-project-drab-theta.vercel.app/)
+[CodeExplanation]()
