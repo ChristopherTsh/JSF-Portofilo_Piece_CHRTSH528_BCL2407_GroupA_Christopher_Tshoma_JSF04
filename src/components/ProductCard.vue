@@ -106,12 +106,18 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  cardRatings: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const store = useStore();
 const router = useRouter();
 
-const cardClass = computed(() => "max-w-sm rounded overflow-hidden shadow-lg p-6");
+const cardClass = computed(
+  () => "max-w-sm rounded overflow-hidden shadow-lg p-6"
+);
 
 const isInWishlist = ref(false);
 const isInCart = ref(false);
@@ -150,6 +156,7 @@ const toggleWishlist = () => {
       price: props.cardPrice,
       image: props.cardImage,
       rating: props.cardRatings,
+      description: props.cardDescription,
     });
   } else {
     store.commit("removeFromWishlist", props.cardId);
@@ -160,14 +167,17 @@ const toggleWishlist = () => {
     } wishlist`
   );
   // Save wishlist status to localStorage
-  localStorage.setItem(`wishlist_${props.cardId}`, JSON.stringify(isInWishlist.value));
+  localStorage.setItem(
+    `wishlist_${props.cardId}`,
+    JSON.stringify(isInWishlist.value)
+  );
 };
 
 const toggleCart = () => {
   isInCart.value = !isInCart.value;
   if (isInCart.value) {
     store.commit("addToCart", {
-      id: props.cardId      ,
+      id: props.cardId,
       title: props.cardTitle,
       price: props.cardPrice,
       category: props.cardCategory,
@@ -206,7 +216,10 @@ const toggleComparison = () => {
     } comparison`
   );
   // Save comparison status to localStorage
-  localStorage.setItem(`comparison_${props.cardId}`, JSON.stringify(isInComparison.value));
+  localStorage.setItem(
+    `comparison_${props.cardId}`,
+    JSON.stringify(isInComparison.value)
+  );
 };
 </script>
 
@@ -230,4 +243,3 @@ const toggleComparison = () => {
   fill: currentColor;
 }
 </style>
-
