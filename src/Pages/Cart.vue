@@ -281,10 +281,10 @@
               <!-- Modified Checkout Button -->
               <button
                 @click="goToCheckout"
-                class="w-full rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                class="w-full rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-900"
               >
-                Proceed to Checkout
-              </button>
+                Proceed to Checkout</button
+              >>
 
               <div class="flex items-center justify-center gap-2">
                 <span
@@ -320,32 +320,11 @@
             </div>
 
             <!-- Voucher Input Section -->
+
             <div
               class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6"
             >
-              <!-- <form class="space-y-4">
-                <div>
-                  <label
-                    for="voucher"
-                    class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                  >
-                    Do you have a voucher or gift card?
-                  </label>
-                  <input
-                    type="text"
-                    id="voucher"
-                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-                    placeholder="Voucher code"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  class="w-full rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Apply Voucher
-                </button>
-              </form> -->
-              <div class="flex justify-end mt-4">
+              <div class="flex justify-center mt-4">
                 <button
                   @click="removeAllProducts"
                   class="rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800"
@@ -362,7 +341,8 @@
 </template>
 
 <script>
-import { useStore, mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { computed } from "vue";
+import { useStore, mapMutations, mapActions, mapGetters } from "vuex";
 import { useRouter } from "vue-router";
 
 /**
@@ -415,8 +395,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getCart"]),
-    ...mapGetters(["cartTotal"]),
+    ...mapGetters(["getCart", "cartTotal"]),
     discountedTotal() {
       const discount = this.discountItemsCount >= 5 ? 0.1 : 0;
       return this.cartTotal * (1 - discount);
@@ -433,10 +412,9 @@ export default {
       "removeFromCart",
       "clearCart",
     ]),
-    ...mapActions(["proceedToPayPal"]),
   },
   removeAllProducts() {
     this.clearCart(); // Call the mutation to clear the cart
-  }
+  },
 };
 </script>
