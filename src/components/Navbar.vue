@@ -1,11 +1,7 @@
 <template>
   <div class="vp-raw">
-    <nav
-      class="border-gray-200 p-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-    >
-      <div
-        class="container flex flex-wrap justify-between items-center mx-auto"
-      >
+    <nav class="border-gray-200 p-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+      <div class="container flex flex-wrap justify-between items-center mx-auto">
         <router-link to="/" class="flex items-center">
           <!-- Show avatar and nickname after login -->
           <template v-if="isAuthenticated">
@@ -14,10 +10,7 @@
               alt="User Avatar"
               class="h-8 w-8 rounded-full mr-2"
             />
-            <span
-              class="self-center text-xl font-semibold whitespace-nowrap"
-              :style="{ color: 'black' }"
-            >
+            <span class="self-center text-xl font-semibold whitespace-nowrap" :style="{ color: 'black' }">
               {{ userNickname }}
             </span>
           </template>
@@ -34,10 +27,7 @@
             >
               <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
             </svg>
-            <span
-              class="self-center text-xl font-semibold whitespace-nowrap"
-              :style="{ color: 'black' }"
-            >
+            <span class="self-center text-xl font-semibold whitespace-nowrap" :style="{ color: 'black' }">
               Home
             </span>
           </template>
@@ -66,10 +56,7 @@
           </svg>
         </button>
 
-        <div
-          :class="['w-full md:block md:w-auto', menuOpen ? '' : 'hidden']"
-          id="navbar-default"
-        >
+        <div :class="['w-full md:block md:w-auto', menuOpen ? '' : 'hidden']" id="navbar-default">
           <ul
             class="flex flex-col p-4 mt-4 rounded-lg border border-gray-100 md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700 bg-gray-50"
           >
@@ -77,6 +64,7 @@
             <li>
               <router-link
                 to="/wishlist"
+                @click.native="closeMenu"
                 class="relative block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 <svg
@@ -95,7 +83,7 @@
                   v-if="wishlistCount"
                   class="absolute top-0 right-0 bg-red-600 text-white text-xs font-semibold rounded-full px-1.5 py-0.5"
                 >
-                <span class="badge">{{ $store.state.wishlistCount }}</span>
+                  {{ wishlistCount }}
                 </span>
                 Wishlist
               </router-link>
@@ -104,6 +92,7 @@
             <li>
               <router-link
                 to="/comparison"
+                @click.native="closeMenu"
                 class="relative block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 <svg
@@ -131,6 +120,7 @@
             <li>
               <router-link
                 to="/cart"
+                @click.native="closeMenu"
                 class="relative block py-2 pr-4 pl-3 rounded md:p-0 text-gray-700 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
               >
                 <svg
@@ -149,7 +139,7 @@
                   v-if="cartCount"
                   class="absolute top-0 right-0 bg-red-600 text-white text-xs font-semibold rounded-full px-1.5 py-0.5"
                 >
-                <span class="badge">{{ $store.state.cartCount }}</span>
+                  {{ cartCount }}
                 </span>
                 Cart
               </router-link>
@@ -216,13 +206,17 @@ export default {
       menuOpen.value = !menuOpen.value;
     };
 
+    const closeMenu = () => {
+      menuOpen.value = false;
+    };
+
     const isAuthenticated = computed(() => store.getters.isAuthenticated);
     const userAvatar = computed(() => store.state.currentUser?.avatar || '');
     const userNickname = computed(() => store.state.currentUser?.nickname || 'User');
 
-    const wishlistCount = computed(() => store.state.wishlist.length);
-    const comparisonCount = computed(() => store.state.comparisonList.length);
-    const cartCount = computed(() => store.state.cart.length);
+    const wishlistCount = computed(() => store.state.wishlistCount);
+    const comparisonCount = computed(() => store.state.comparisonCount);
+    const cartCount = computed(() => store.state.cartCount);
 
     const logout = () => {
       store.commit('logout');
@@ -232,6 +226,7 @@ export default {
     return {
       menuOpen,
       toggleMenu,
+      closeMenu,
       isAuthenticated,
       userAvatar,
       userNickname,

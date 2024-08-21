@@ -15,15 +15,26 @@ const store = createStore({
     currentUser: null, // Store current user's data
     isAuthenticated: false,
     comparisonList: [],
+    cartCount: 0,
+    wishlistCount: 0,
+    comparisonCount: 0,
   },
   mutations: {
 
     resetWishlist(state) {
-      state.usersData[state.currentUser.userId].wishlist = [];
+      const userId = state.currentUser?.userId;
+        if (userId) {
+            state.usersData[userId].wishlist = [];
+            state.wishlistCount = 0; // Reset wishlist count
+        }
     },
     updateWishlistCounter(state) {
       state.wishlistCount = state.usersData[state.currentUser.userId].wishlist.length;
     },
+    updateComparisonCounter(state) {
+      const userId = state.currentUser?.userId;
+      state.comparisonCount = userId ? state.usersData[userId].comparisonList.length : 0;
+  },
     updateCartCounter(state) {
       state.cartCount = state.cart.length;
     },
@@ -45,6 +56,7 @@ const store = createStore({
         } else {
           state.usersData[userId].cart.push({ ...product, quantity: 1 });
         }
+        state.cartCount = state.usersData[userId].cart.length;
       }
     },
     removeFromCart(state, productId) {
@@ -84,6 +96,7 @@ const store = createStore({
         if (!existingProduct) {
           state.usersData[userId].wishlist.push(product);
         }
+        state.wishlistCount = state.usersData[userId].wishlist.length;
       }
     },
     removeFromWishlist(state, productId) {
@@ -99,6 +112,7 @@ const store = createStore({
         if (!existingProduct && state.usersData[userId].comparisonList.length < 4) {
           state.usersData[userId].comparisonList.push(product);
         }
+        state.comparisonCount = state.usersData[userId].comparisonList.length;
       }
     },
     removeFromComparison(state, productId) {
@@ -109,18 +123,19 @@ const store = createStore({
     },
     resetComparison(state) {
       const userId = state.currentUser?.userId;
-      if (userId) {
-        state.usersData[userId].comparisonList = [];
-      }
+        if (userId) {
+            state.usersData[userId].comparisonList = [];
+            state.comparisonCount = 0; // Reset comparison count
+        }
     },
     setUser(state, { token, nickname = '', avatar = '', userData }) {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.sub;
-  
+    
       // Set current user state
       state.currentUser = { userId, token, nickname, avatar };
       state.isAuthenticated = true;
-  
+    
       // Initialize user data if not already present
       if (!state.usersData[userId]) {
         state.usersData[userId] = {
@@ -142,17 +157,43 @@ const store = createStore({
           ...userData // Ensure existing fields are updated
         };
       }
-
+    
+      // Restore counts from the user's data
+      state.cartCount = state.usersData[userId].cart.length;
+      state.wishlistCount = state.usersData[userId].wishlist.length;
+      state.comparisonCount = state.usersData[userId].comparisonList.length;
+    
       // Debug log to check if user data is correctly stored
-      console.log('User data stored in Vuex:', state.usersData[userId]);
-    },
-    logout(state) {
-      state.currentUser = null;
-      state.isAuthenticated = false;
+      console.log('User data after setUser:', state.usersData[userId]);
     },
     setState(state, newState) {
       Object.assign(state, newState);
     },
+
+    logout(state) {
+      // Store current counts temporarily
+      state.tempCartCount = state.cartCount;
+      state.tempWishlistCount = state.wishlistCount;
+      state.tempComparisonCount = state.comparisonCount;
+    
+      // Reset the display counts to 0
+      state.cartCount = 0;
+      state.wishlistCount = 0;
+      state.comparisonCount = 0;
+    
+      state.currentUser = null;
+      state.isAuthenticated = false;
+    
+      // Debug log to confirm logout
+      console.log('User logged out, current state:', state);
+    },
+   // Restore counts on login
+   restoreCounts(state) {
+    state.cartCount = state.usersData[state.currentUser.userId].cart.length;
+    state.wishlistCount = state.usersData[state.currentUser.userId].wishlist.length;
+    state.comparisonCount = state.usersData[state.currentUser.userId].comparisonList.length;
+  },
+
   },
   actions: {
     async proceedToPayPal({ state }) {
