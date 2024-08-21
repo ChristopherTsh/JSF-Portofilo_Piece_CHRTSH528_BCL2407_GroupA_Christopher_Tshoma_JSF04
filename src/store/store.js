@@ -52,6 +52,12 @@ const store = createStore({
         }
       }
     },
+    clearCart(state) {
+      const userId = state.currentUser?.userId;
+      if (userId) {
+        state.usersData[userId].cart = []; // Empty the cart
+      }
+    },
     decrementQuantity(state, productId) {
       const userId = state.currentUser?.userId;
       if (userId) {
