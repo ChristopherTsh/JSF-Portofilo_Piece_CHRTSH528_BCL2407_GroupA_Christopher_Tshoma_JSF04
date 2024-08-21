@@ -386,7 +386,7 @@ import { useRouter } from "vue-router";
  * @return {Object} - Returns the necessary data and methods for the template.
  */
 
-export default {
+ export default {
   setup() {
     const store = useStore();
     const router = useRouter();
@@ -395,12 +395,7 @@ export default {
       router.push("/checkout");
     };
     const userId = store.state.currentUser?.userId;
-    const cart = userId ? store.state.usersData[userId].cart : [];
-
-    watchEffect(() => {
-      console.log('w')
-    })
-    //watch cart items and cart total to recount item on item removal
+    const cart = computed(() => store.getters.getCart);
 
     return {
       goToCheckout,
@@ -409,14 +404,15 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getCart", "cartTotal"]),
     discountedTotal() {
       const discount = this.discountItemsCount >= 5 ? 0.1 : 0;
       return this.cartTotal * (1 - discount);
     },
     discountItemsCount() {
-      console.log(this.cart);
       return this.cart.length;
+    },
+    cartTotal() {
+      return this.$store.getters.cartTotal;
     },
   },
   methods: {
@@ -426,16 +422,12 @@ export default {
       "removeFromCart",
       "clearCart",
     ]),
-  },
-  removeAllProducts() {
-      try {
-        console.log('Attempting to remove all products'); // Debugging: Log before attempting action
-        this.clearCart(); // Attempt to clear cart
-      } catch (error) {
-        console.error('Error while removing products:', error); // Debugging: Log error details
-      }
+    removeAllProducts() {
+      this.clearCart();
     },
+  },
 };
+
 </script>
 
 <style scoped>
