@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
+import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import Button from "./Button.vue";
@@ -112,8 +112,6 @@ const props = defineProps({
   },
 });
 
-
-
 const store = useStore();
 const router = useRouter();
 
@@ -121,38 +119,27 @@ const cardClass = computed(
   () => "max-w-sm rounded overflow-hidden shadow-lg p-6"
 );
 
-const isInWishlist = ref(false);
-const isInCart = ref(false);
-const isInComparison = ref(false);
+// Computed properties to check if the product is in the cart, wishlist, or comparison
+const isInWishlist = computed(() =>
+  store.getters.getWishlist.some((item) => item.id === props.cardId)
+);
 
-onMounted(() => {
-  // Load wishlist status from localStorage
-  const wishlistState = localStorage.getItem(`wishlist_${props.cardId}`);
-  if (wishlistState) {
-    isInWishlist.value = JSON.parse(wishlistState);
-  }
+const isInCart = computed(() =>
+  store.getters.getCart.some((item) => item.id === props.cardId)
+);
 
-  // Load cart status from localStorage
-  const cartState = localStorage.getItem(`cart_${props.cardId}`);
-  if (cartState) {
-    isInCart.value = JSON.parse(cartState);
-  }
-
-  // Load comparison status from localStorage
-  const comparisonState = localStorage.getItem(`comparison_${props.cardId}`);
-  if (comparisonState) {
-    isInComparison.value = JSON.parse(comparisonState);
-  }
-});
+const isInComparison = computed(() =>
+  store.getters.comparisonList.some((item) => item.id === props.cardId)
+);
 
 const viewProduct = () => {
   router.push(`/product/${props.cardId}`);
 };
 
 const toggleWishlist = () => {
-  console.log('Received Ratings:', props.cardRatings);
-  isInWishlist.value = !isInWishlist.value;
   if (isInWishlist.value) {
+    store.commit("removeFromWishlist", props.cardId);
+  } else {
     store.commit("addToWishlist", {
       id: props.cardId,
       title: props.cardTitle,
@@ -161,24 +148,18 @@ const toggleWishlist = () => {
       rating: props.cardRatings,
       description: props.cardDescription,
     });
-  } else {
-    store.commit("removeFromWishlist", props.cardId);
   }
   console.log(
     `Product ${props.cardId} ${
       isInWishlist.value ? "added to" : "removed from"
     } wishlist`
   );
-  // Save wishlist status to localStorage
-  localStorage.setItem(
-    `wishlist_${props.cardId}`,
-    JSON.stringify(isInWishlist.value)
-  );
 };
 
 const toggleCart = () => {
-  isInCart.value = !isInCart.value;
   if (isInCart.value) {
+    store.commit("removeFromCart", props.cardId);
+  } else {
     store.commit("addToCart", {
       id: props.cardId,
       title: props.cardTitle,
@@ -186,22 +167,18 @@ const toggleCart = () => {
       category: props.cardCategory,
       image: props.cardImage,
     });
-  } else {
-    store.commit("removeFromCart", props.cardId);
   }
   console.log(
     `Product ${props.cardId} ${
       isInCart.value ? "added to" : "removed from"
     } cart`
   );
-  // Save cart status to localStorage
-  localStorage.setItem(`cart_${props.cardId}`, JSON.stringify(isInCart.value));
 };
 
 const toggleComparison = () => {
-  console.log('Received Ratings:', props.cardRatings);
-  isInComparison.value = !isInComparison.value;
   if (isInComparison.value) {
+    store.commit("removeFromComparison", props.cardId);
+  } else {
     store.commit("addToComparison", {
       id: props.cardId,
       title: props.cardTitle,
@@ -211,18 +188,11 @@ const toggleComparison = () => {
       description: props.cardDescription,
       rating: props.cardRatings,
     });
-  } else {
-    store.commit("removeFromComparison", props.cardId);
   }
   console.log(
     `Product ${props.cardId} ${
       isInComparison.value ? "added to" : "removed from"
     } comparison`
-  );
-  // Save comparison status to localStorage
-  localStorage.setItem(
-    `comparison_${props.cardId}`,
-    JSON.stringify(isInComparison.value)
   );
 };
 </script>

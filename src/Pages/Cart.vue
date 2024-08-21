@@ -11,12 +11,14 @@
         class="items-center flex w-full max-w-2xl text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base"
       >
         <li
-          class="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10"
+          :class="{ 'text-blue-600': currentStep === 'cart' }"
+          class="after:border-1 flex items-center after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10"
         >
           <span
             class="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden"
           >
             <svg
+              :class="{ 'text-blue-600': currentStep === 'cart' }"
               class="me-2 h-4 w-4 sm:h-5 sm:w-5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
@@ -38,12 +40,14 @@
         </li>
 
         <li
-          class="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10"
+          :class="{ 'text-blue-600': currentStep === 'checkout' }"
+          class="after:border-1 flex items-center after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10"
         >
           <span
             class="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden"
           >
             <svg
+              :class="{ 'text-blue-600': currentStep === 'checkout' }"
               class="me-2 h-4 w-4 sm:h-5 sm:w-5"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
@@ -64,8 +68,12 @@
           </span>
         </li>
 
-        <li class="flex shrink-0 items-center">
+        <li
+          :class="{ 'text-blue-600': currentStep === 'summary' }"
+          class="flex shrink-0 items-center"
+        >
           <svg
+            :class="{ 'text-blue-600': currentStep === 'summary' }"
             class="me-2 h-4 w-4 sm:h-5 sm:w-5"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
@@ -319,7 +327,7 @@
               </div>
             </div>
 
-            <!-- Voucher Input Section -->
+            <!-- remove -->
 
             <div
               class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6"
@@ -392,6 +400,7 @@ export default {
     return {
       goToCheckout,
       cart,
+      currentStep: "cart",
     };
   },
   computed: {
@@ -414,7 +423,18 @@ export default {
     ]),
   },
   removeAllProducts() {
-    this.clearCart(); // Call the mutation to clear the cart
-  },
+      try {
+        console.log('Attempting to remove all products'); // Debugging: Log before attempting action
+        this.clearCart(); // Attempt to clear cart
+      } catch (error) {
+        console.error('Error while removing products:', error); // Debugging: Log error details
+      }
+    },
 };
 </script>
+
+<style scoped>
+.text-blue-600 {
+  color: #2563eb; /* Blue color */
+}
+</style>

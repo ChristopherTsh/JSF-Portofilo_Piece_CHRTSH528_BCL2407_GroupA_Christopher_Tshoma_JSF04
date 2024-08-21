@@ -7,7 +7,7 @@ import Wishlist from '../Pages/Wishlist.vue';
 import Login from '../Pages/Login.vue';
 import store from '../store/store';
 import Comparison from '../Pages/Comparison.vue';
-import PaymentConfirmation from '../components/PaymentConfirmation.vue';
+// import PaymentConfirmation from '../components/PaymentConfirmation.vue';
 import Checkout from '../Pages/Checkout.vue';
 
 const routes = [
@@ -19,7 +19,7 @@ const routes = [
   { path: '/checkout', name: 'Checkout', component: Checkout },
   { path: '/login', name: 'Login', component: Login },
   { path: '/wishlist', name: 'Wishlist', component: Wishlist, meta: { requiresAuth: true } },
-  { path: '/payment-confirmation', name: 'PaymentConfirmation', component: PaymentConfirmation }
+  // { path: '/payment-confirmation', name: 'PaymentConfirmation', component: PaymentConfirmation }
 ];
 
 const router = createRouter({

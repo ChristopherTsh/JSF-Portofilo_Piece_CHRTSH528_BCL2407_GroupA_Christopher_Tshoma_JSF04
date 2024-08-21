@@ -65,11 +65,30 @@ const store = createStore({
       }
     },
     removeFromCart(state, productId) {
+        const userId = state.currentUser?.userId;
+        if (userId) {
+            const updatedCart = state.usersData[userId].cart.filter(
+                (product) => product.id !== productId
+            );
+            state.usersData[userId].cart = updatedCart; // Direct assignment
+
+            console.log('Updated cart after removal:', state.usersData[userId].cart); // Debugging: Log updated cart
+        }
+    },
+    clearCart(state) {
+        const userId = state.currentUser?.userId;
+        if (userId) {
+            state.usersData[userId].cart = []; // Empty the cart
+
+            console.log('Cart cleared, current state:', state.usersData[userId].cart); // Debugging: Log state after clearing cart
+        }
+    },
+    clearCart(state) {
       const userId = state.currentUser?.userId;
       if (userId) {
-        state.usersData[userId].cart = state.usersData[userId].cart.filter(
-          (product) => product.id !== productId
-        );
+        state.usersData[userId].cart = []; // Empty the cart
+
+        console.log('Cart cleared, current state:', state.usersData[userId].cart); // Debugging: Log state after clearing cart
       }
     },
     incrementQuantity(state, productId) {
