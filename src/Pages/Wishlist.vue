@@ -9,7 +9,18 @@
           Your wishlist is empty.
         </div>
         <div v-else>
-          <div class="flex justify-end mb-4">
+          <div class="flex justify-between mb-4">
+            <!-- Dropdown Filter -->
+            <div>
+              <label for="filter" class="mr-2">Filter by:</label>
+              <select v-model="selectedFilter" id="filter" class="py-2 px-4 border rounded-lg">
+                <option value="">All</option>
+                <option value="price">Price</option>
+                <option value="rating">Rating</option>
+                <option value="category">Category</option>
+              </select>
+            </div>
+
             <button
               @click="removeAllFromWishlist"
               class="py-2 px-4 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
@@ -17,8 +28,9 @@
               Remove All Products
             </button>
           </div>
+
           <div
-            v-for="product in wishlist"
+            v-for="product in filteredWishlist"
             :key="product.id"
             class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16 mb-4 p-4 border rounded shadow-sm w-full"
           >
@@ -127,7 +139,7 @@
 
 <script>
 import { useStore } from "vuex";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 export default {
   setup() {
@@ -135,6 +147,24 @@ export default {
     const userId = store.state.currentUser.userId;
 
     const wishlist = computed(() => store.state.usersData[userId].wishlist);
+
+    // Ref for the selected filter option
+    const selectedFilter = ref("");
+
+    // Computed property to filter the wishlist
+    const filteredWishlist = computed(() => {
+      if (selectedFilter.value === "price") {
+        return wishlist.value.slice().sort((a, b) => a.price - b.price);
+      } else if (selectedFilter.value === "rating") {
+        return wishlist.value.slice().sort((a, b) => b.rating.rate - a.rating.rate);
+      } else if (selectedFilter.value === "category") {
+        return wishlist.value.slice().sort((a, b) =>
+          a.category.localeCompare(b.category)
+        );
+      } else {
+        return wishlist.value; // No filter, return the original wishlist
+      }
+    });
 
     /**
      * Removes a product from the wishlist based on the product ID.
@@ -165,6 +195,8 @@ export default {
 
     return {
       wishlist,
+      selectedFilter,
+      filteredWishlist,
       removeFromWishlist,
       removeAllFromWishlist,
       addToCart,
