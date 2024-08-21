@@ -112,6 +112,8 @@ const props = defineProps({
   },
 });
 
+
+
 const store = useStore();
 const router = useRouter();
 
@@ -148,6 +150,7 @@ const viewProduct = () => {
 };
 
 const toggleWishlist = () => {
+  console.log('Received Ratings:', props.cardRatings);
   isInWishlist.value = !isInWishlist.value;
   if (isInWishlist.value) {
     store.commit("addToWishlist", {
@@ -196,6 +199,7 @@ const toggleCart = () => {
 };
 
 const toggleComparison = () => {
+  console.log('Received Ratings:', props.cardRatings);
   isInComparison.value = !isInComparison.value;
   if (isInComparison.value) {
     store.commit("addToComparison", {

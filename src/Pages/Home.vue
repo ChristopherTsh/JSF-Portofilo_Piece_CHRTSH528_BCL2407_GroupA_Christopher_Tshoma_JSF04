@@ -134,7 +134,7 @@
             :dark-card="false"
             :card-image="product.image"
             :card-title="product.title"
-            :card-ratings="product.ratings" 
+            ::cardRatings="4.5" 
             :card-description="product.description"
             :card-price="product.price"
             :card-category="product.category"

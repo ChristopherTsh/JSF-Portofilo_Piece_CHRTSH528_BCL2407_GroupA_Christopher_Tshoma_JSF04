@@ -50,7 +50,7 @@
                     v-for="i in 5"
                     :key="i"
                     :class="
-                      i <= Math.round(cardRatings?.rate) ? 'filled' : 'empty'
+                      i <= Math.round(product.rating.rate) ? 'filled' : 'empty'
                     "
                     viewBox="0 0 24 24"
                   >
