@@ -119,7 +119,7 @@ const props = defineProps({
     required: true,
   },
   cardRatings: {
-    type: Number,
+    type: Object,
     default: 0,
   },
 });
