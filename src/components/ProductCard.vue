@@ -76,7 +76,19 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import Button from "./Button.vue";
 
-// Props definition
+/**
+ * @typedef {Object} Props
+ * @property {boolean} darkCard - Indicates if the card should use a dark theme.
+ * @property {string} cardImage - URL of the product image.
+ * @property {string} cardTitle - Title of the product.
+ * @property {string} cardDescription - Description of the product.
+ * @property {number} cardPrice - Price of the product.
+ * @property {string} cardCategory - Category of the product.
+ * @property {number} cardId - Unique identifier for the product.
+ * @property {number} cardRatings - Ratings of the product.
+ */
+
+/** @type {Props} */
 const props = defineProps({
   darkCard: {
     type: Boolean,
@@ -115,27 +127,47 @@ const props = defineProps({
 const store = useStore();
 const router = useRouter();
 
-const cardClass = computed(
-  () => "max-w-sm rounded overflow-hidden shadow-lg p-6"
-);
+/**
+ * Computed property for card styling class.
+ * @type {ComputedRef<string>}
+ */
+const cardClass = computed(() => "max-w-sm rounded overflow-hidden shadow-lg p-6");
 
-// Computed properties to check if the product is in the cart, wishlist, or comparison
+/**
+ * Computed property to check if the product is in the wishlist.
+ * @type {ComputedRef<boolean>}
+ */
 const isInWishlist = computed(() =>
   store.getters.getWishlist.some((item) => item.id === props.cardId)
 );
 
+/**
+ * Computed property to check if the product is in the cart.
+ * @type {ComputedRef<boolean>}
+ */
 const isInCart = computed(() =>
   store.getters.getCart.some((item) => item.id === props.cardId)
 );
 
+/**
+ * Computed property to check if the product is in the comparison list.
+ * @type {ComputedRef<boolean>}
+ */
 const isInComparison = computed(() =>
   store.getters.comparisonList.some((item) => item.id === props.cardId)
 );
 
+/**
+ * Navigate to the product details page.
+ */
 const viewProduct = () => {
   router.push(`/product/${props.cardId}`);
 };
 
+/**
+ * Toggle the product's wishlist status.
+ * Adds or removes the product from the wishlist in the Vuex store.
+ */
 const toggleWishlist = () => {
   if (isInWishlist.value) {
     store.commit("removeFromWishlist", props.cardId);
@@ -156,6 +188,10 @@ const toggleWishlist = () => {
   );
 };
 
+/**
+ * Toggle the product's cart status.
+ * Adds or removes the product from the cart in the Vuex store.
+ */
 const toggleCart = () => {
   if (isInCart.value) {
     store.commit("removeFromCart", props.cardId);
@@ -175,6 +211,10 @@ const toggleCart = () => {
   );
 };
 
+/**
+ * Toggle the product's comparison status.
+ * Adds or removes the product from the comparison list in the Vuex store.
+ */
 const toggleComparison = () => {
   if (isInComparison.value) {
     store.commit("removeFromComparison", props.cardId);

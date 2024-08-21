@@ -195,6 +195,10 @@ import { ref, computed } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 
+/**
+ * Navbar component that provides navigation links and user information.
+ * @component
+ */
 export default {
   name: 'Navbar',
   setup() {
@@ -202,22 +206,59 @@ export default {
     const store = useStore();
     const router = useRouter();
 
+    /**
+     * Toggles the state of the mobile menu.
+     */
     const toggleMenu = () => {
       menuOpen.value = !menuOpen.value;
     };
 
+    /**
+     * Closes the mobile menu.
+     */
     const closeMenu = () => {
       menuOpen.value = false;
     };
 
+    /**
+     * Whether the user is authenticated.
+     * @type {ComputedRef<boolean>}
+     */
     const isAuthenticated = computed(() => store.getters.isAuthenticated);
+
+    /**
+     * The URL or path of the user's avatar.
+     * @type {ComputedRef<string>}
+     */
     const userAvatar = computed(() => store.state.currentUser?.avatar || '');
+
+    /**
+     * The nickname of the currently authenticated user.
+     * @type {ComputedRef<string>}
+     */
     const userNickname = computed(() => store.state.currentUser?.nickname || 'User');
 
+    /**
+     * The count of items in the user's wishlist.
+     * @type {ComputedRef<number>}
+     */
     const wishlistCount = computed(() => store.state.wishlistCount);
+
+    /**
+     * The count of items in the user's comparison list.
+     * @type {ComputedRef<number>}
+     */
     const comparisonCount = computed(() => store.state.comparisonCount);
+
+    /**
+     * The count of items in the user's cart.
+     * @type {ComputedRef<number>}
+     */
     const cartCount = computed(() => store.state.cartCount);
 
+    /**
+     * Logs the user out and redirects to the login page.
+     */
     const logout = () => {
       store.commit('logout');
       router.push('/login');
